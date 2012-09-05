@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/gzstream
+END
+gzstream.h
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/gzstream/gzstream.h
+END
+logo.gif
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/gzstream/logo.gif
+END
+version
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/gzstream/version
+END
+test_gzip.C
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/gzstream/test_gzip.C
+END
+index.html
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/gzstream/index.html
+END
+test_gunzip.C
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/gzstream/test_gunzip.C
+END
+COPYING.LIB
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/gzstream/COPYING.LIB
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/gzstream/Makefile
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/gzstream/README
+END
+gzstream.C
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/gzstream/gzstream.C
+END

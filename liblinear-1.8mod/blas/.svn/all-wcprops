@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/blas
+END
+dnrm2.c
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/blas/dnrm2.c
+END
+daxpy.c
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/blas/daxpy.c
+END
+blas.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/blas/blas.h
+END
+blasp.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/blas/blasp.h
+END
+dscal.c
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/blas/dscal.c
+END
+ddot.c
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/blas/ddot.c
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/blas/Makefile
+END

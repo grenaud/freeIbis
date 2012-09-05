@@ -1,0 +1,79 @@
+release: 1.11
+2008-7-17
+1.Fixed c stdlib error when compiler is gcc-4.3+.
+
+release: 1.10
+2008-04-21
+1.Fixed a bug in dealign.cpp.
+2.Updated the install function in makefile. 
+
+release: 1.09
+2008-04-09
+1.Fixed a bug which will miss some 2 snp reads.
+2.Fixed a bug which will miss some paired hits.
+
+release: 1.08
+2008-03-24
+1. Fixed a bug in "dealign.cpp".
+
+release: 1.07
+2008-03-18
+1. Added an option '-y' of pair-end alignment.
+
+release: 1.06
+2008-03-13
+1. Fixed a bug which will rarely overflow on alignment of mRNA tags;
+
+
+release: 1.05
+2008-02-27
+1. Fixed a bug which will report some false deletions;
+2. Revised the program interface to be more clear to users;
+3. More detailed description on Readme.
+
+release: 1.04
+2008-01-26
+1. Fixed a bug on pair-end alignment which will miss some paired hits.
+2. Fixed a bug which will report some wrong pairs.
+
+release: 1.03
+2008-01-03
+1. Detected a small bug at reading reference.
+2. Debugged soap.short, soap.contig, soap.huge throughly.
+
+release: 1.02
+2007-12-23
+1. Reorganized makefile so that soap, soap.contig, soap.short and soap.huge will be generated on the same time;
+2. Revised pair-end alignment. Paired hits and unpaired hits are putting on two independent output files now;
+3. It will also iteratively trim low-quality 3'-end sequence for pair-end alignment to increase sensitivity.
+
+release: 1.01
+2007-11-23
+1. Fixed a bug at removing equal hits;
+2. Fixed a bug of repetitive calculation at some extreme cases;
+3. Accelerate a little.
+
+release: 1.0
+Formal stable version.
+
+release: 0.9.3
+2007-10-23
+1. Added -READ_60, since we are getting longer reads with high quality. So the maximum read length allowed is 60bp;
+2. Implemented the function of iteratively trim low-quality ends during alignment;
+3. Finally make the gapped alignment works. Small gaps (1~3bp) inside read is mappable;
+4. Further revised the pairwise alignment modular. And we have tested it extensively in simulated data, but we will expect to have more revision after trying more on real data;
+5. Some special function for miRNA and mRNA tag alignment was designed and implemented in this version;
+6. Updated a little of the output format, provide more information in a user friendly way.
+
+release: 0.9.2
+2007-09-22
+1. Added -READ_48, so now the maximum read length allowed is 48bp.
+
+release: 0.9.1
+2007-08-23
+1. Fixed a bug at hit comparison when sorting;
+2. Added pes_dealign to summarize result;
+
+release: 0.9
+2007-07-01
+1. After broadly internal test on real data, this is the first stable version for outside download.

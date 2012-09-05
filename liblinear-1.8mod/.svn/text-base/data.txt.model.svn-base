@@ -1,0 +1,6 @@
+solver_type L1R_LR
+nr_class 2
+label 1 0
+nr_feature 0
+bias -1
+w

@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/bioinf/!svn/ver/3073/freeibis/trunk/liblinear-1.8mod
+END
+model10.mod
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/model10.mod
+END
+linear.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/linear.h
+END
+tron.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/tron.cpp
+END
+data.txt.model
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/data.txt.model
+END
+linear.def
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/linear.def
+END
+tron.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/tron.h
+END
+COPYRIGHT
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/COPYRIGHT
+END
+Makefile.win
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/Makefile.win
+END
+heart_scale
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/heart_scale
+END
+linear.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/linear.cpp
+END
+predict.c
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/predict.c
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/README
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/Makefile
+END
+train.c
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/train.c
+END

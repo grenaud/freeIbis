@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/bioinf/!svn/ver/2954/freeibis/trunk/qualRecal
+END
+LinRegFixed.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/2954/freeibis/trunk/qualRecal/LinRegFixed.cpp
+END
+LinRegFixed.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/bioinf/!svn/ver/2954/freeibis/trunk/qualRecal/LinRegFixed.h
+END
+findBestk.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/bioinf/!svn/ver/2901/freeibis/trunk/qualRecal/findBestk.cpp
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/bioinf/!svn/ver/2901/freeibis/trunk/qualRecal/Makefile
+END
+estimaErrorLookupMax.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/bioinf/!svn/ver/2924/freeibis/trunk/qualRecal/estimaErrorLookupMax.cpp
+END

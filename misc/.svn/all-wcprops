@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/misc
+END
+tell_Test_Train.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/misc/tell_Test_Train.py
+END
+createTrainingSeqs_bustard.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/misc/createTrainingSeqs_bustard.py
+END
+compare_error_soap.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/misc/compare_error_soap.py
+END
+createTrainingSeqs_brokenLateCycle.py
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/misc/createTrainingSeqs_brokenLateCycle.py
+END
+trainingSeqs2TestIndex.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/misc/trainingSeqs2TestIndex.py
+END
+soap_wrapper.py
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/misc/soap_wrapper.py
+END
+trainingSeqs2SVMlightIterative.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/misc/trainingSeqs2SVMlightIterative.py
+END
+createTrainingSeqs_soapv2.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/misc/createTrainingSeqs_soapv2.py
+END

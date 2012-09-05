@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched
+END
+dbseq.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/dbseq.cpp
+END
+reads.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/reads.cpp
+END
+align.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/align.h
+END
+GPL_3.0.txt
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/GPL_3.0.txt
+END
+param.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/param.cpp
+END
+dealign.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/dealign.cpp
+END
+dbseq.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/dbseq.h
+END
+reads.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/reads.h
+END
+param.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/param.h
+END
+dealign.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/dealign.h
+END
+utilities.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/utilities.cpp
+END
+RELEASE.txt
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/RELEASE.txt
+END
+pairs.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/pairs.cpp
+END
+utilities.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/utilities.h
+END
+dealign.cpp.liyr
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/dealign.cpp.liyr
+END
+pairs.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/pairs.h
+END
+main.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/main.cpp
+END
+soap_dealign.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/soap_dealign.cpp
+END
+align.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/align.cpp
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/README.txt
+END
+makefile
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/bioinf/!svn/ver/2832/freeibis/trunk/soap_1.11_patched/makefile
+END

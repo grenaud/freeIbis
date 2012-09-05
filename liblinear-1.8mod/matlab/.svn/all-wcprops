@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/matlab
+END
+run.m
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/matlab/run.m
+END
+linear_model_matlab.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/matlab/linear_model_matlab.h
+END
+libsvmwrite.c
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/matlab/libsvmwrite.c
+END
+make.m
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/matlab/make.m
+END
+libsvmread.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/matlab/libsvmread.c
+END
+linear_model_matlab.c
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/matlab/linear_model_matlab.c
+END
+predict.c
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/matlab/predict.c
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/matlab/Makefile
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/matlab/README
+END
+train.c
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/bioinf/!svn/ver/3041/freeibis/trunk/liblinear-1.8mod/matlab/train.c
+END

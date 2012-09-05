@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/bioinf/!svn/ver/3099/freeibis/trunk/predictor
+END
+svm_libocas_classify.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/bioinf/!svn/ver/3099/freeibis/trunk/predictor/svm_libocas_classify.cpp
+END
+input.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/bioinf/!svn/ver/3074/freeibis/trunk/predictor/input.cpp
+END
+locs_input.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/bioinf/!svn/ver/3074/freeibis/trunk/predictor/locs_input.cpp
+END
+cifinput.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/bioinf/!svn/ver/3074/freeibis/trunk/predictor/cifinput.cpp
+END
+erf.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/bioinf/!svn/ver/3074/freeibis/trunk/predictor/erf.h
+END
+input.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/bioinf/!svn/ver/3074/freeibis/trunk/predictor/input.h
+END
+firecrest_input.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/3074/freeibis/trunk/predictor/firecrest_input.cpp
+END
+ipar_input.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/bioinf/!svn/ver/3074/freeibis/trunk/predictor/ipar_input.cpp
+END
+erf.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/bioinf/!svn/ver/3074/freeibis/trunk/predictor/erf.cpp
+END

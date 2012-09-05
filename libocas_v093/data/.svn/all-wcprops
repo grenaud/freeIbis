@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data
+END
+riply_tst.light
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data/riply_tst.light
+END
+example4_train.light
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data/example4_train.light
+END
+riply_trn.mat
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data/riply_trn.mat
+END
+example4_test.light
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data/example4_test.light
+END
+refernce_solution.mat
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data/refernce_solution.mat
+END
+riply_trn.light
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data/riply_trn.light
+END
+gender_images.mat
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data/gender_images.mat
+END
+riply_tst.mat
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data/riply_tst.mat
+END
+example4_train.mat
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data/example4_train.mat
+END
+example4_test.mat
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data/example4_test.mat
+END
+lena.jpg
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/data/lena.jpg
+END

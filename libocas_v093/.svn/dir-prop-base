@@ -1,0 +1,10 @@
+K 10
+svn:ignore
+V 39
+msvmocas
+linclass
+svmocas
+*.o
+*.mexa64
+
+END

@@ -1,0 +1,299 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/bioinf/!svn/ver/3096/freeibis/trunk/libocas_v093
+END
+svmlight_linclass.m
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/svmlight_linclass.m
+END
+lib_svmlight_format.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/libocas_v093/lib_svmlight_format.h
+END
+msvmocas_mex.c
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/msvmocas_mex.c
+END
+msvmocas_test.m
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/msvmocas_test.m
+END
+liblbp.c
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/liblbp.c
+END
+AUTHORS
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/AUTHORS
+END
+lbpfilter.mexa64
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/lbpfilter.mexa64
+END
+svmlight_linclass.mexa64
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/bioinf/!svn/ver/2869/freeibis/trunk/libocas_v093/svmlight_linclass.mexa64
+END
+linclass.c
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/bioinf/!svn/ver/2872/freeibis/trunk/libocas_v093/linclass.c
+END
+liblbp.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/liblbp.h
+END
+msvmocas.mexa64
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/bioinf/!svn/ver/2869/freeibis/trunk/libocas_v093/msvmocas.mexa64
+END
+svmocas.c
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/bioinf/!svn/ver/2869/freeibis/trunk/libocas_v093/svmocas.c
+END
+libocas.c
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/bioinf/!svn/ver/2924/freeibis/trunk/libocas_v093/libocas.c
+END
+libocas.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/bioinf/!svn/ver/2924/freeibis/trunk/libocas_v093/libocas.h
+END
+compute_errors_mex.c
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/compute_errors_mex.c
+END
+ocas_lbp_helper.c
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/ocas_lbp_helper.c
+END
+RELEASES
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/RELEASES
+END
+lbppyr.m
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/lbppyr.m
+END
+svmocas_lbp.m
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/svmocas_lbp.m
+END
+INSTALL
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/INSTALL
+END
+svmocas.m
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/svmocas.m
+END
+ocas_lbp_helper.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/ocas_lbp_helper.h
+END
+msvmocas.c
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/bioinf/!svn/ver/2924/freeibis/trunk/libocas_v093/msvmocas.c
+END
+compute_errors.mexa64
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/bioinf/!svn/ver/2869/freeibis/trunk/libocas_v093/compute_errors.mexa64
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/bioinf/!svn/ver/3096/freeibis/trunk/libocas_v093/Makefile
+END
+lbpfilter_mex.c
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/lbpfilter_mex.c
+END
+svmocas.mexa64
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/bioinf/!svn/ver/2869/freeibis/trunk/libocas_v093/svmocas.mexa64
+END
+svmocas_lbp_example.m
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/svmocas_lbp_example.m
+END
+sparse_mat.c
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/sparse_mat.c
+END
+svmlight_linclass_mex.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/svmlight_linclass_mex.c
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/LICENSE
+END
+msvmocas.m
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/msvmocas.m
+END
+sparse_mat.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/sparse_mat.h
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/ChangeLog
+END
+Contents.m
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/Contents.m
+END
+svmocas_parseout.m
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/svmocas_parseout.m
+END
+libqp.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/libqp.h
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/README
+END
+libqp_splx.c
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/libqp_splx.c
+END
+lbppyr_features_mex.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/lbppyr_features_mex.c
+END
+lbppyr_mex.c
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/lbppyr_mex.c
+END
+svmocas_lbp_mex.c
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/svmocas_lbp_mex.c
+END
+ocas_helper.c
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/bioinf/!svn/ver/2924/freeibis/trunk/libocas_v093/ocas_helper.c
+END
+svmocas_mex.c
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/svmocas_mex.c
+END
+libocas_test.m
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/libocas_test.m
+END
+lbppyr_features.mexa64
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/lbppyr_features.mexa64
+END
+ocas_helper.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/bioinf/!svn/ver/2924/freeibis/trunk/libocas_v093/ocas_helper.h
+END
+version.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/bioinf/!svn/ver/2833/freeibis/trunk/libocas_v093/version.h
+END
+lib_svmlight_format.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/bioinf/!svn/ver/3069/freeibis/trunk/libocas_v093/lib_svmlight_format.c
+END

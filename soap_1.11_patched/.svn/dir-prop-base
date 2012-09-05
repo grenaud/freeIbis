@@ -1,0 +1,11 @@
+K 10
+svn:ignore
+V 52
+soap.contig
+soap_dealign
+soap.huge
+soap.short
+soap
+
+
+END
