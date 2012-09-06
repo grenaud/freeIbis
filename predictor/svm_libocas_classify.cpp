@@ -759,8 +759,8 @@ int main_(int argc, char**argv)
     // XXX here be dragons.  How about getopt_long or popt instead?
     int i ;
     for(i=1;(i<argc) && ((argv[i])[0] == '-');i++) {
-
 	switch ((argv[i])[1]){
+
 	case 'h': print_help(); return 0 ;
 	case 'v': i++; verbosity=atol(argv[i]); break;
 	case 'e': i++; experiment = argv[i] ; break;
@@ -772,7 +772,6 @@ int main_(int argc, char**argv)
 	case 'n': i++; min_qscore = double(atoi(argv[i])); break;
 	case 'r': recalibrateQuals=true; break;
 	case 'q': quick=true; break;
-
 	case '1': i++; forwardl = atoi(argv[i]); numberOfCyclesCmdArg++; break;
 	case '2': i++; reversel = atoi(argv[i]); numberOfCyclesCmdArg++; break;
 	case '3': i++; index1l  = atoi(argv[i]); numberOfCyclesCmdArg++; break;
@@ -793,7 +792,7 @@ int main_(int argc, char**argv)
     }
 
     if(numberOfCyclesCmdArg != 4){
-	cout<<"Must specify all cycles for every part of the sequence using -1,-2,-3,-4"<<endl<<"Use 0 if not in use e.g. -2 0 for a single end or -4 for a single index"<<endl;
+	cout<<"Must enter all cycles for every part of the sequence using -1,-2,-3,-4"<<endl<<"Use 0 if not in use e.g. -2 0 for a single end or -4 for a single index"<<numberOfCyclesCmdArg<<endl;
 	print_help();
 	return 1;
     }
@@ -802,7 +801,6 @@ int main_(int argc, char**argv)
     hasIndex1   = (index1l  != 0);
     hasIndex2   = (index2l  != 0);
     totalCycles=forwardl+reversel+index1l+index2l;
-
     if ((coordtype > 3) || (coordtype < 1)){
 	cout << endl << "Coordinate type out of range: " << coordtype << endl;
 	print_help();
@@ -947,7 +945,8 @@ int main_(int argc, char**argv)
 	}
 	stringstream nameseq;
 	nameseq<<experiment << ':' + lane << ':' << tile << ':' << posx << ':' << posy ;
-	outfile << '@' <<nameseq<<"\n";
+	string nameseqs=nameseq.str();
+	outfile << '@' <<nameseqs<<"\n";
         //outfile << '@' << experiment << ':' << lane << ':' << tile << ':' << posx << ':' << posy << '\n' ;
 
 	if(int(seq.size()) != totalCycles){
@@ -963,33 +962,39 @@ int main_(int argc, char**argv)
 			<< "\n*A " << qualA << "\n*C " << qualC << "\n*G " << qualG << "\n*T " << qualT << '\n' ;
 	    }else{
 		if(isPairedEnd){
+		    // cerr<<"seq "<<seq<<endl;
+		    // cerr<<"f   "<<seq.substr(0,forwardl) <<endl;
+		    // cerr<<"r   "<<seq.substr(forwardl+index1l,reversel)<<endl;
+		    // cerr<<"i1  "<<((index1l==0)?(""):(seq.substr(forwardl,index1l)))<<endl;
+		    // cerr<<"i2  "<<((index2l==0)?(""):(seq.substr(forwardl+index1l+reversel,index2l)))<<endl;
 
-		    bw->writePairedSequence(nameseq.str(),// name,
+		    bw->writePairedSequence(nameseqs,// name,
 					    seq.substr(0,forwardl), // seq,
 					    qualB.substr(0,forwardl), //qual
-					    seq.substr(forwardl+index1l+1,reversel), // seq,
-					    qualB.substr(forwardl+index1l+1,reversel), //qual
-					    ((index1l==0)?(""):(seq.substr(forwardl+1,index1l))),
-					    ((index1l==0)?(""):(qualB.substr(forwardl+1,index1l))),
-					    ((index2l==0)?(""):(seq.substr(forwardl+index1l+reversel+1,index2l))),
-					    ((index2l==0)?(""):(qualB.substr(forwardl+index1l+reversel+1,index2l))),
+					    seq.substr(forwardl+index1l,reversel), // seq,
+					    qualB.substr(forwardl+index1l,reversel), //qual
+					    ((index1l==0)?(""):(seq.substr(forwardl,index1l))),
+					    ((index1l==0)?(""):(qualB.substr(forwardl,index1l))),
+					    ((index2l==0)?(""):(seq.substr(forwardl+index1l+reversel,index2l))),
+					    ((index2l==0)?(""):(qualB.substr(forwardl+index1l+reversel,index2l))),
 					    hasIndex1,
 					    hasIndex2);
 		   
 		}else{
-		    bw->writeSingleSequence(nameseq.str(),// name,
+		    bw->writeSingleSequence(nameseqs,// name,
 					    seq.substr(0,forwardl), // seq,
 					    qualB.substr(0,forwardl), //qual
-					    ((index1l==0)?(""):(seq.substr(forwardl+1,index1l))),
-					    ((index1l==0)?(""):(qualB.substr(forwardl+1,index1l))),
-					    ((index2l==0)?(""):(seq.substr(forwardl+index1l+reversel+1,index2l))),
-					    ((index2l==0)?(""):(qualB.substr(forwardl+index1l+reversel+1,index2l))),
+					    ((index1l==0)?(""):(seq.substr(forwardl,index1l))),
+					    ((index1l==0)?(""):(qualB.substr(forwardl,index1l))),
+					    ((index2l==0)?(""):(seq.substr(forwardl+index1l+reversel,index2l))),
+					    ((index2l==0)?(""):(qualB.substr(forwardl+index1l+reversel,index2l))),
 					    hasIndex1,
 					    hasIndex2);
 		}
 	    }
 	}
-        if( !outfile ) throw "error writing output" ; 
+	if(outformat != 2 ) //not bam, the not open is handled in the bam writer module
+	    if( !outfile ) throw "error writing output" ; 
     }
 
     outfile.close();

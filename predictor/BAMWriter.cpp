@@ -200,12 +200,12 @@ inline void BAMWriter::writeSequence(//ofstream * myfile,
     if(hasIndex1 ){
 	tag="XIZ"+index1;
 	writeTag(tag);
-	 tag="XJZ"+index1Q;
+	 tag="YIZ"+index1Q;
 	writeTag(tag);
     }
 
     if(hasIndex2 ){
-	tag="YIZ"+index2;
+	tag="XJZ"+index2;
 	writeTag(tag);
 	tag="YJZ"+index2Q;
 	writeTag(tag);

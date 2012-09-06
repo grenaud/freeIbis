@@ -66,6 +66,10 @@ parser.add_option_group(group)
 
 (options, args) = parser.parse_args()
 
+if( (options.outbcl) ):
+  print "BCL format is no longer supported";
+  sys.exit(1)
+
 
 if( (options.outbcl   and options.out4Q)  or 
     (options.outbcl   and options.fastq)  or 
@@ -358,6 +362,9 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
     params.append("3")
   if options.out4Q:
     params.extend(["-f","1"])
+  if options.outbam:
+    params.extend(["-f","2"])
+
   params.extend(["-e",options.expID]);
   params.extend(["-m",str(options.maxqual)]);
   params.extend(["-n",str(def_MINQUALSCORE)]);
@@ -389,6 +396,12 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
       currentTile=fields[2];
       if filename.endswith("_int.txt.p.gz"):
         fields = filename.split("_")
+
+        myparams.append("-1 "+str(options.forwardl));
+        myparams.append("-2 "+str(options.reversel));
+        myparams.append("-3 "+str(options.index1l));
+        myparams.append("-4 "+str(options.index2l));
+
         if os.path.isfile(firecrest_folder+"Firecrest/L00"+fields[1]+"/s_"+fields[1]+"_"+fields[2]+"_idx.txt"):
           myparams.extend(["-i",firecrest_folder+"Firecrest/L00"+fields[1]+"/s_"+fields[1]+"_"+fields[2]+"_idx.txt"])
           act_lanes.add(fields[1])
@@ -402,6 +415,8 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
         else:
           print "Could not find index file for tile:",filename,"Skipping..."
           continue
+
+
       if(options.outbcl):
         myparams.append("-b");
         myparams.append("-l "+str(currentLane));
@@ -425,28 +440,40 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
 
         arrayOfFileInfix[fields[1]].append("_".join(filename.split("_")[:3]));
 
-        if not (options.nooverwrite and os.path.isfile(houtname+".gz")):
-          if ( options.out4Q or options.fastq):
-            myparams.append(" /dev/stdout | gzip -c > "+houtname+".gz")
-          else:
-            myparams.append(" /dev/stdout  > "+houtname+".ubam")
-          arrayOfJobsToSend.append([prog_prediction,myparams]);
-          #handle_jobs(prog_prediction,myparams)
+        if ( options.out4Q or options.fastq):
+          if not (options.nooverwrite and os.path.isfile(houtname+".gz")):
+            myparams.append(" /dev/stdout | gzip -c > "+houtname+".gz");
+        else:
+          if not (options.nooverwrite and os.path.isfile(houtname)):
+            myparams.append(" "+houtname);
+
+        arrayOfJobsToSend.append([prog_prediction,myparams]);
+
 
 
   if not found_IPAR_Firecrest: ## CIF FILES...
     for lane in lanes:
+
       if os.path.isdir(firecrest_folder+"L00%d/"%lane):
+
         cycles_folders = filter(lambda x: x.startswith('C') and x.endswith('.1') and os.path.isdir(firecrest_folder+"L00%d/%s"%(lane,x)), os.listdir(firecrest_folder+"L00%d/"%lane))
+
         if len(cycles_folders) > 0:
           cif_files = filter(lambda x: x.endswith('.cif'),os.listdir(firecrest_folder+"L00%d/%s/"%(lane,cycles_folders[0])))
+
           for cif in cif_files:
             fields = cif.split('.')[0].split("_")
+            
             if (len(fields) > 2):
               myparams = list(params)
               tile = int(fields[2].lstrip('0'));
             
               if (tiles != None) and (str(tile) not in tiles): continue
+              myparams.append("-1 "+str(options.forwardl));
+              myparams.append("-2 "+str(options.reversel));
+              myparams.append("-3 "+str(options.index1l));
+              myparams.append("-4 "+str(options.index2l));
+
               if(options.outbcl):
                 myparams.append("-b");
                 myparams.append("-l "+str(lane));
@@ -467,6 +494,7 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
               else:
                 continue
 
+
               if(options.outbcl):
                 myparams.append(modeldir+"SVMlight_models.index")
                 myparams.append(svmpath);
@@ -483,14 +511,15 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
                 arrayOfFileInfix[fields[1]].append("_".join(fields[:3]));
 
                 #myparams.append(houtname)
-                if not (options.nooverwrite and os.path.isfile(houtname+".gz")):
-                  if ( options.out4Q or options.fastq):
+                if ( options.out4Q or options.fastq):
+                  if not (options.nooverwrite and os.path.isfile(houtname+".gz")):
                     myparams.append(" /dev/stdout | gzip -c > "+houtname+".gz");
-                  else:
-                    myparams.append(" /dev/stdout  > "+houtname+".ubam");
+                else:
+                  if not (options.nooverwrite and os.path.isfile(houtname)):
+                    myparams.append("  "+houtname);
 
-                  arrayOfJobsToSend.append([prog_prediction,myparams]);
-                  #handle_jobs(prog_prediction,myparams)
+                arrayOfJobsToSend.append([prog_prediction,myparams]);
+                #handle_jobs(prog_prediction,myparams)
         else: 
           continue
 
@@ -521,7 +550,7 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
 
   for lane in lanes:
     if(options.outbam):
-      cmdCombine="bgzip -c "+svmpath+"s_"+str(lane)+"_sequence.ubam ";
+      cmdCombine="cat "+svmpath+"s_"+str(lane)+"_sequence.ubam ";
       
     for index in sorted(arrayOfFileInfix[str(lane)],cmp=compareTileNumber):  
       filetomove=svmpath+index+".";
@@ -551,6 +580,7 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
         print "ERROR: file "+str(filetomove)+" not found";
         
     if(options.outbam):
+      cmdCombine+=" | bgzip -c  > "+svmpath+"s_"+str(lane)+"_sequence.bam ";
       while(True):
         if(options.mock):
           print cmdCombine;
