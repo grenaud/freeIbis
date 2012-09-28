@@ -534,8 +534,8 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
 
   if not options.mock:
     for lane in lanes:
-      outfile = open(svmpath+"s_"+str(lane)+"_finished.txt",'w');       
-      outfile.close();
+      #outfile = open(svmpath+"s_"+str(lane)+"_finished.txt",'w');       
+      #outfile.close();
       if(options.outbam):
         if not(options.mock):
           fileHandleWrite = open ( svmpath+"s_"+str(lane)+"_sequence.ubam", 'wb' ) ;
@@ -609,6 +609,10 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
 
     wait_jobs()
 
+  if not options.mock:
+    for lane in lanes:
+      outfile = open(svmpath+"s_"+str(lane)+"_finished.txt",'w');       
+      outfile.close();
   print "Per lane raw sequence files created."+timeString();
 else:
   print "Could not access training data. Check parameters."
