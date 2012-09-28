@@ -13,7 +13,7 @@ import sys,os
 from optparse import OptionParser
 import gzip,shelve
 import math
-import Numeric as N
+#import Numeric as N
 import array
 
 #######################################
