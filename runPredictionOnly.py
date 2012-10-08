@@ -548,6 +548,7 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
           outfile = open(svmpath+"s_"+str(lane)+"_sequence.txt.gz",'w');       
           outfile.close();
 
+  #merging files for each tile
   for lane in lanes:
     if(options.outbam):
       cmdCombine="cat "+svmpath+"s_"+str(lane)+"_sequence.ubam ";
@@ -581,15 +582,10 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
         
     if(options.outbam):
       cmdCombine+=" | bgzip -c  > "+svmpath+"s_"+str(lane)+"_sequence.bam ";
-      while(True):
-        if(options.mock):
-          print cmdCombine;
-          break;
-        myjobcat=subprocess.Popen(cmdCombine,shell=True);
-        if (myjobcat.wait() == 0):
-          break;
-        else:
-          print "WARNING: command "+str(myjobcat)+" failed, restarting";
+      handle_jobs(cmdCombine);
+
+
+  wait_jobs();
 
   if not options.keeptiles:
     for lane in lanes:
