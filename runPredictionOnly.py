@@ -12,6 +12,8 @@
 import sys,os
 from optparse import OptionParser
 from optparse import OptionGroup
+from struct import * #for pack()
+
 import subprocess
 import time
 
@@ -25,6 +27,26 @@ else:
 f=open(root_bin+'/params.py')
 c=compile(f.read(), root_bin+'/params.py', "exec")
 eval(c)
+
+
+commitversionibis="unknown";
+bamtag="@PG\tID:freeIbis";
+if os.path.exists(root_bin+"/.git/logs/HEAD"): #read the last github that was done if it exists
+  fhGit = open ( root_bin+"/.git/logs/HEAD" );
+  while 1:
+      line=fhGit.readline();
+      line=line.rstrip('\n');
+      if(not(line) ):
+          break;
+      commitversionibis=line.split(" ")[1];
+      
+  fhGit.close();
+else:
+  print "not exist";
+if(commitversionibis != "unknown"):
+  bamtag=bamtag+"\tVN:"+str(commitversionibis);
+bamtag=bamtag+"\n";
+
 
 #####################
 # USER PARAMETER ...
@@ -394,13 +416,13 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
       myparams = list(params)
       currentLane=fields[1];
       currentTile=fields[2];
+      myparams.append("-1 "+str(options.forwardl));
+      myparams.append("-2 "+str(options.reversel));
+      myparams.append("-3 "+str(options.index1l));
+      myparams.append("-4 "+str(options.index2l));
+
       if filename.endswith("_int.txt.p.gz"):
         fields = filename.split("_")
-
-        myparams.append("-1 "+str(options.forwardl));
-        myparams.append("-2 "+str(options.reversel));
-        myparams.append("-3 "+str(options.index1l));
-        myparams.append("-4 "+str(options.index2l));
 
         if os.path.isfile(firecrest_folder+"Firecrest/L00"+fields[1]+"/s_"+fields[1]+"_"+fields[2]+"_idx.txt"):
           myparams.extend(["-i",firecrest_folder+"Firecrest/L00"+fields[1]+"/s_"+fields[1]+"_"+fields[2]+"_idx.txt"])
@@ -541,8 +563,13 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
           fileHandleWrite = open ( svmpath+"s_"+str(lane)+"_sequence.ubam", 'wb' ) ;
           fileHandleWrite.write("BAM");
           fileHandleWrite.write('\1');        
-          for elem in range(8):
-            fileHandleWrite.write('\0');
+          #for elem in range(8):
+          #  fileHandleWrite.write('\0');
+
+
+          fileHandleWrite.write(pack('i',int( len(bamtag) )));#writing length of bam tag
+          fileHandleWrite.write(bamtag);
+          fileHandleWrite.write(pack('i',int(0)));
           fileHandleWrite.close();
       else:
           outfile = open(svmpath+"s_"+str(lane)+"_sequence.txt.gz",'w');       
