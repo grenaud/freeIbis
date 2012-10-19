@@ -99,7 +99,7 @@ if(jobcreated.returncode != 0):
 parser = OptionParser(usage="usage: %prog [options]")
 group = OptionGroup(parser, "General","General options")
 group.add_option("-c", "--cores", dest="cores", help="Number of CPU cores to be used (default 1)",default=1,type="int")
-group.add_option("--corespred", dest="corespred", help="Number of CPU cores for prediction only (default 1)",default=1,type="int")
+group.add_option("--corespred", dest="corespred", help="Number of CPU cores for prediction only (default :use same as -c)",default=None,type="int")
 
 group.add_option("-e", "--expID", dest="expID", help="Name of experiment to use for sequence names")
 group.add_option("-o", "--outpath", dest="outpath", help="Path for output files")
