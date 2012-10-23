@@ -29,6 +29,7 @@ c=compile(f.read(), root_bin+'/params.py', "exec")
 eval(c)
 
 
+#Putting the PG tag in the bam file
 commitversionibis="unknown";
 bamtag="@PG\tID:freeIbis";
 if os.path.exists(root_bin+"/.git/logs/HEAD"): #read the last github that was done if it exists
@@ -42,7 +43,7 @@ if os.path.exists(root_bin+"/.git/logs/HEAD"): #read the last github that was do
       
   fhGit.close();
 else:
-  print "not exist";
+  print "No version number available";
 if(commitversionibis != "unknown"):
   bamtag=bamtag+"\tVN:"+str(commitversionibis);
 bamtag=bamtag+"\n";
