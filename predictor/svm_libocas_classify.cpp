@@ -143,8 +143,8 @@ struct Tmodel {
     // STRUCT_LEARN_PARM sparm;
     MODELDATA * matrix;
 
-    MODELDATA       * qualScoreSVM;
-    LinearRegParams * linearRegParams;
+    MODELDATA       ** qualScoreSVM;
+    LinearRegParams ** linearRegParams;
 
     char type;
     
@@ -159,8 +159,20 @@ struct Tmodel {
 // void free_struct_model(Tmodel& m
 struct FreeModel { 
     void operator()( Tmodel& m ) { 
-	//free_struct_model( m.matrix ) ; 
+	free(m.matrix->wMatrix);	    	
 	free(m.matrix);	    
+
+	if(recalibrateQuals){    
+	    for(int qssvm=0;qssvm<4;qssvm++){		
+		free(m.qualScoreSVM[ qssvm ]->wMatrix);
+		delete(m.linearRegParams[ qssvm ]);
+		free(m.qualScoreSVM[ qssvm ]);
+	    }
+	}
+
+	delete[] m.linearRegParams ;
+	delete[] m.qualScoreSVM ;
+	
     } ;
 } ;
 
@@ -169,6 +181,11 @@ string intStringify(int i) {
     s << i;
     return s.str();
 }
+
+// inline void deleteRETURNEDRESULTS(RETURNEDRESULTS * todelete){
+//     delete(todelete->scores);
+//     delete(todelete);
+// }
 
 inline static unsigned char char2bin(char b){
     if(b == 'A')
@@ -212,7 +229,7 @@ void append_seq_quality(string &s, string &qb, string &qa, string &qc, string &q
 	int calledDist  =-1;
 	for (unsigned int cclass = 0; cclass < 4; cclass++){
 
-	    MODELDATA matrixToUse;
+	    MODELDATA * matrixToUse;
 	    if(!quick)
 		matrixToUse=model->qualScoreSVM[cclass];
 
@@ -226,21 +243,21 @@ void append_seq_quality(string &s, string &qb, string &qa, string &qc, string &q
 		    sumForAll+=(1.0/(1.0+exp(-1.0*y->scores[oclass])));
 		}
 		double postprob=log( sumForClass / sumForAll );
-		if(postprob < model->linearRegParams[cclass].k){
-		    qualities[cclass]= postprob*model->linearRegParams[cclass].slopePreK  + model->linearRegParams[cclass].interceptPreK;
+		if(postprob < model->linearRegParams[cclass]->k){
+		    qualities[cclass]= postprob*model->linearRegParams[cclass]->slopePreK  + model->linearRegParams[cclass]->interceptPreK;
 		}else{
-		    qualities[cclass]= postprob*model->linearRegParams[cclass].slopePostK + model->linearRegParams[cclass].interceptPostK;
+		    qualities[cclass]= postprob*model->linearRegParams[cclass]->slopePostK + model->linearRegParams[cclass]->interceptPostK;
 		}
 	    }else{
 		for( unsigned oclass = 0 ; oclass < 4 ; oclass++ ){
-		    sumForClass+=y->scores[oclass]*matrixToUse.wMatrix[LIBOCAS_INDEX(oclass,0,matrixToUse.nDimensions)];     
+		    sumForClass+=y->scores[oclass]*matrixToUse->wMatrix[LIBOCAS_INDEX(oclass,0,matrixToUse->nDimensions)];     
 		}
-		sumForClass+=matrixToUse.wMatrix[LIBOCAS_INDEX(4,0,matrixToUse.nDimensions)];     
+		sumForClass+=matrixToUse->wMatrix[LIBOCAS_INDEX(4,0,matrixToUse->nDimensions)];     
 
-		if(sumForClass < model->linearRegParams[cclass].k){
-		    qualities[cclass]= sumForClass*model->linearRegParams[cclass].slopePreK  + model->linearRegParams[cclass].interceptPreK;
+		if(sumForClass < model->linearRegParams[cclass]->k){
+		    qualities[cclass]= sumForClass*model->linearRegParams[cclass]->slopePreK  + model->linearRegParams[cclass]->interceptPreK;
 		}else{
-		    qualities[cclass]= sumForClass*model->linearRegParams[cclass].slopePostK + model->linearRegParams[cclass].interceptPostK;
+		    qualities[cclass]= sumForClass*model->linearRegParams[cclass]->slopePostK + model->linearRegParams[cclass]->interceptPostK;
 		}
 	    }
 
@@ -255,7 +272,7 @@ void append_seq_quality(string &s, string &qb, string &qa, string &qc, string &q
 	    calledDist=call_class;
 	// cout<<"calledDist "<<calledDist<<endl;
 
-	MODELDATA matrixToUse;;
+	MODELDATA * matrixToUse;;
 	if(!quick)
 	    matrixToUse=model->qualScoreSVM[calledDist];
 	double sumForClass=0.0;
@@ -270,20 +287,20 @@ void append_seq_quality(string &s, string &qb, string &qa, string &qc, string &q
 	    }
 	    double postprob=log( sumForClass / sumForAll );
 
-	    if(postprob < model->linearRegParams[calledDist].k){
-		qualities[4]= postprob*model->linearRegParams[calledDist].slopePreK  + model->linearRegParams[calledDist].interceptPreK;
+	    if(postprob < model->linearRegParams[calledDist]->k){
+		qualities[4]= postprob*model->linearRegParams[calledDist]->slopePreK  + model->linearRegParams[calledDist]->interceptPreK;
 	    }else{
-		qualities[4]= postprob*model->linearRegParams[calledDist].slopePostK + model->linearRegParams[calledDist].interceptPostK;
+		qualities[4]= postprob*model->linearRegParams[calledDist]->slopePostK + model->linearRegParams[calledDist]->interceptPostK;
 	    }
 	}else{
 	    for( unsigned oclass = 0 ; oclass < 4 ; oclass++ ){
-		sumForClass+=y->scores[oclass]*matrixToUse.wMatrix[LIBOCAS_INDEX(oclass,0,matrixToUse.nDimensions)];     
+		sumForClass+=y->scores[oclass]*matrixToUse->wMatrix[LIBOCAS_INDEX(oclass,0,matrixToUse->nDimensions)];     
 	    }
-	    sumForClass+=matrixToUse.wMatrix[LIBOCAS_INDEX(4,0,matrixToUse.nDimensions)];     
-	    if(sumForClass < model->linearRegParams[calledDist].k){
-		qualities[4]= sumForClass*model->linearRegParams[calledDist].slopePreK  + model->linearRegParams[calledDist].interceptPreK;
+	    sumForClass+=matrixToUse->wMatrix[LIBOCAS_INDEX(4,0,matrixToUse->nDimensions)];     
+	    if(sumForClass < model->linearRegParams[calledDist]->k){
+		qualities[4]= sumForClass*model->linearRegParams[calledDist]->slopePreK  + model->linearRegParams[calledDist]->interceptPreK;
 	    }else{
-		qualities[4]= sumForClass*model->linearRegParams[calledDist].slopePostK + model->linearRegParams[calledDist].interceptPostK;
+		qualities[4]= sumForClass*model->linearRegParams[calledDist]->slopePostK + model->linearRegParams[calledDist]->interceptPostK;
 	    }
 	}
 
@@ -372,9 +389,9 @@ void printModel(const MODELDATA * model){
 }
 
 
-LinearRegParams  readLinearParams(string inputParamsFile){
+LinearRegParams * readLinearParams(string inputParamsFile){
     string line;
-    LinearRegParams toReturn;
+    LinearRegParams * toReturn =new LinearRegParams;
     int lineCounter=0;
     ifstream valuesin;
 
@@ -391,15 +408,15 @@ LinearRegParams  readLinearParams(string inputParamsFile){
 	    }	
 
 	    if(lineCounter==0)
-		toReturn.k=tempor;
+		toReturn->k=tempor;
 	    if(lineCounter==1)
-		toReturn.interceptPreK=tempor;
+		toReturn->interceptPreK=tempor;
 	    if(lineCounter==2)
-		toReturn.slopePreK=tempor;
+		toReturn->slopePreK=tempor;
 	    if(lineCounter==3)
-		toReturn.interceptPostK=tempor;
+		toReturn->interceptPostK=tempor;
 	    if(lineCounter==4)
-		toReturn.slopePostK=tempor;
+		toReturn->slopePostK=tempor;
 
 
 	    lineCounter++;
@@ -531,7 +548,7 @@ MODELDATA * readW(const char * inputMatrixFile){
 
 
     fclose(fid);
-
+    free(line);
     toReturn->wMatrix     =wLocal;
     toReturn->nDimensions =nLines;
     toReturn->nColumns    =nCols;
@@ -567,6 +584,7 @@ RETURNEDRESULTS * singleRowData(const double * dataToPredict,const int nDimInMod
 
     predictionToReturn         = (RETURNEDRESULTS *)calloc(1, sizeof(RETURNEDRESULTS));
     predictionToReturn->scores = (double *)calloc(matrixToUse->nColumns, sizeof(double));
+
 
     if( predictionToReturn->scores == NULL ){
 	fprintf(stderr,"Not enough memmory to allocate scores.\n");
@@ -624,13 +642,15 @@ void read_model_index( vector<Tmodel> &models,            //to store the SVM mod
 	    Tmodel *newModel = &models.back() ;
 
 	    if( 0 == access( fname.c_str(), R_OK ) ){
-
+		
 		newModel->matrix = readW(fname.c_str());
+
+
 		if(recalibrateQuals){    
 		    if(!quick)
-			newModel->qualScoreSVM = new MODELDATA[4];
-		    newModel->linearRegParams= new LinearRegParams[4];
-		    string filePrefix        = string(fname);
+			newModel->qualScoreSVM = new MODELDATA * [4];
+		    newModel->linearRegParams  = new LinearRegParams * [4];
+		    string filePrefix          = string(fname);
 
 		    filePrefix.replace(    filePrefix.rfind(stringPrefix1),     stringPrefix2.length(),stringPrefix2); 
 		    filePrefix.replace(    filePrefix.rfind(stringSuffix1),     stringSuffix2.length(),""); 
@@ -638,7 +658,13 @@ void read_model_index( vector<Tmodel> &models,            //to store the SVM mod
 			if(!quick){
 			    ostringstream fileWithSVM;
 			    fileWithSVM<<filePrefix<<"_"<<myBaseToRead<<stringSuffix2;
-			    newModel->qualScoreSVM[myBaseToRead-1]    =*(readW(fileWithSVM.str().c_str()));  // we should probablydeallocate the initial memory
+			    // MODELDATA * tempmod=;
+			    // newModel->qualScoreSVM[myBaseToRead-1]    =*( tempmod );  // we should 
+			    newModel->qualScoreSVM[myBaseToRead-1]    =readW(fileWithSVM.str().c_str());
+			    // free(tempmod->wMatrix);
+			    // free(tempmod);
+
+
 			}
 
 			ostringstream fileWithLRP;
@@ -659,8 +685,8 @@ void read_model_index( vector<Tmodel> &models,            //to store the SVM mod
 
 		if(recalibrateQuals){
 		    if(!quick)
-			newModel->qualScoreSVM   = new MODELDATA[4];
-		    newModel->linearRegParams= new LinearRegParams[4];
+			newModel->qualScoreSVM   = new MODELDATA * [4];
+		    newModel->linearRegParams= new LinearRegParams * [4];
 		    string filePrefix        = string(fname);
 
 		    filePrefix.replace(    filePrefix.rfind(stringPrefix1),     stringPrefix2.length(),stringPrefix2); 
@@ -669,7 +695,7 @@ void read_model_index( vector<Tmodel> &models,            //to store the SVM mod
 			if(!quick){
 			    ostringstream fileWithSVM;
 			    fileWithSVM<<filePrefix<<"_"<<myBaseToRead<<stringSuffix2;
-			    newModel->qualScoreSVM[myBaseToRead-1]   =*(readW(fileWithSVM.str().c_str()));		      
+			    newModel->qualScoreSVM[myBaseToRead-1]   =readW(fileWithSVM.str().c_str());		      
 			}
 			ostringstream fileWithLRP;
 			fileWithLRP<<filePrefix<<"_"<<myBaseToRead<<stringSuffix3;
@@ -849,8 +875,11 @@ int main_(int argc, char**argv)
     }
 
     // iteration over clusters (originally one cluster == one line)
+    // unsigned int numberClusters=0;
+
     int lane, tile, posx, posy ;
     while( input->next_cluster( &lane, &tile, &posx, &posy ) )	{
+	 // numberClusters++;
 	vector<Tmodel>::iterator modelitr = models.begin();
 	string seq,qualB,qualA,qualC,qualG,qualT;
 	double iSA, iSC, iSG, iST, iSAA, iSAC, iSAG, iSAT, iSBA=0, iSBC=0, iSBG=0, iSBT=0;
@@ -862,59 +891,61 @@ int main_(int argc, char**argv)
 	// intensities for *next* cycle (from the POV of the current model)	
 	while( input->next_cycle( &iSAA, &iSAC, &iSAG, &iSAT ) ) {
 	    if( modelitr == models.end() ) throw "need at least as many models as cycles" ;
-        if( !iSA && !iSC && !iSG && !iST ) {
-            // no light at all.  no need to pester the SVM with it.
-            append_zero_quality( seq, qualB, qualA, qualC, qualG, qualT ) ;
-        } else {
-            RETURNEDRESULTS * y;
-            switch( modelitr->type ) 
-            {
-                case 'M':
-                    myValues[0]=iSA;
-                    myValues[1]=iSC;
-                    myValues[2]=iSG;
-                    myValues[3]=iST;
-                    myValues[4]=iSBA;
-                    myValues[5]=iSBC;
-                    myValues[6]=iSBG;
-                    myValues[7]=iSBT;
-                    myValues[8]=iSAA;
-                    myValues[9]=iSAC;
-                    myValues[10]=iSAG;
-                    myValues[11]=iSAT;
-                    y=singleRowData(myValues,12,modelitr->matrix);
-                    break;
+	    if( !iSA && !iSC && !iSG && !iST ) {
+		// no light at all.  no need to pester the SVM with it.
+		append_zero_quality( seq, qualB, qualA, qualC, qualG, qualT ) ;
+	    } else {
+		RETURNEDRESULTS * y;
+		switch( modelitr->type ) 
+		    {
+		    case 'M':
+			myValues[0]=iSA;
+			myValues[1]=iSC;
+			myValues[2]=iSG;
+			myValues[3]=iST;
+			myValues[4]=iSBA;
+			myValues[5]=iSBC;
+			myValues[6]=iSBG;
+			myValues[7]=iSBT;
+			myValues[8]=iSAA;
+			myValues[9]=iSAC;
+			myValues[10]=iSAG;
+			myValues[11]=iSAT;
+			y=singleRowData(myValues,12,modelitr->matrix);
+			break;
 
-                case 'E':
-                    myValues[0]=iSA;
-                    myValues[1]=iSC;
-                    myValues[2]=iSG;
-                    myValues[3]=iST;
-                    myValues[4]=iSBA;
-                    myValues[5]=iSBC;
-                    myValues[6]=iSBG;
-                    myValues[7]=iSBT;
-                    y=singleRowData(myValues,8,modelitr->matrix);
-                    break;
+		    case 'E':
+			myValues[0]=iSA;
+			myValues[1]=iSC;
+			myValues[2]=iSG;
+			myValues[3]=iST;
+			myValues[4]=iSBA;
+			myValues[5]=iSBC;
+			myValues[6]=iSBG;
+			myValues[7]=iSBT;
+			y=singleRowData(myValues,8,modelitr->matrix);
+			break;
 
-                case 'B':
-                    myValues[0]=iSA;
-                    myValues[1]=iSC;
-                    myValues[2]=iSG;
-                    myValues[3]=iST;
-                    myValues[4]=iSAA;
-                    myValues[5]=iSAC;
-                    myValues[6]=iSAG;
-                    myValues[7]=iSAT;
-                    y=singleRowData(myValues,8,modelitr->matrix);
-                    break;
+		    case 'B':
+			myValues[0]=iSA;
+			myValues[1]=iSC;
+			myValues[2]=iSG;
+			myValues[3]=iST;
+			myValues[4]=iSAA;
+			myValues[5]=iSAC;
+			myValues[6]=iSAG;
+			myValues[7]=iSAT;
+			y=singleRowData(myValues,8,modelitr->matrix);
+			break;
 
-                default:
-                    throw string( "found unknown model type '" ) + modelitr->type + '\'';
-            }
-            append_seq_quality(seq,qualB,qualA,qualC,qualG,qualT,y,&*modelitr/*,outfileBCL[currentCycle++]*/);
-            free(y);
-        }
+		    default:
+			throw string( "found unknown model type '" ) + modelitr->type + '\'';
+		    }
+		append_seq_quality(seq,qualB,qualA,qualC,qualG,qualT,y,&*modelitr/*,outfileBCL[currentCycle++]*/);
+
+		free(y->scores);
+		free(y);
+	    }
 	    // shift data back, we'll soon enter the next cycle
 	    iSBA = iSA; iSBC = iSC; iSBG = iSG; iSBT = iST;
 	    iSA = iSAA; iSC = iSAC; iSG = iSAG; iST = iSAT;
@@ -941,6 +972,8 @@ int main_(int argc, char**argv)
 	    y=singleRowData(myValues,8,modelitr->matrix);
 
 	    append_seq_quality(seq,qualB,qualA,qualC,qualG,qualT,y,&*modelitr /*,outfileBCL[currentCycle++]*/ ) ;
+
+	    free(y->scores);
 	    free(y);
 	}
 	stringstream nameseq;
@@ -995,9 +1028,12 @@ int main_(int argc, char**argv)
 	}
 	if(outformat != 2 ) //not bam, the not open is handled in the bam writer module
 	    if( !outfile ) throw "error writing output" ; 
+	// if(numberClusters>100)
+	//     break;
     }
 
     outfile.close();
+
     for_each( models.begin(), models.end(), FreeModel() ) ;
 
     if(outformat == 2 ){ //not bam

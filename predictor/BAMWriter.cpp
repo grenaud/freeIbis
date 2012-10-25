@@ -19,10 +19,11 @@ BAMWriter::BAMWriter(string filename){
 
 BAMWriter::~BAMWriter(){
     close();
+    delete(myfile);
 }
 
 void BAMWriter::close(){
-    myfile->close();    
+    myfile->close();        
 }
 
 
