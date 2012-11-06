@@ -977,9 +977,9 @@ int main_(int argc, char**argv)
 	    free(y);
 	}
 	stringstream nameseq;
-	nameseq<<experiment << ':' + lane << ':' << tile << ':' << posx << ':' << posy ;
+	nameseq<<experiment << ':' << lane << ':' << tile << ':' << posx << ':' << posy ;
 	string nameseqs=nameseq.str();
-	outfile << '@' <<nameseqs<<"\n";
+
         //outfile << '@' << experiment << ':' << lane << ':' << tile << ':' << posx << ':' << posy << '\n' ;
 
 	if(int(seq.size()) != totalCycles){
@@ -988,9 +988,11 @@ int main_(int argc, char**argv)
 	}
 
         if( outformat == 0 ){//fastq
+	    outfile << '@' <<nameseqs<<"\n";
             outfile << seq << "\n+\n" << qualB << '\n' ; 
 	}else{
 	    if( outformat == 1 ){ //4q
+		outfile << '@' <<nameseqs<<"\n";
 		outfile << "SQ " << seq << "\nQA " << qualB
 			<< "\n*A " << qualA << "\n*C " << qualC << "\n*G " << qualG << "\n*T " << qualT << '\n' ;
 	    }else{
