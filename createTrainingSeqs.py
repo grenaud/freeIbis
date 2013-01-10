@@ -275,7 +275,10 @@ def eval_file(filename,filetype,start,end,srange,start2=None,end2=None,srange2=N
       param_str += " --start2=%d --end2=%d --srange2='%s' --outfile2=%s"%(start2,end2,srange2,remove_files_r2[cur_jobid])
 
     cjob = sub_script+" "+param_str
-    external_jobs.append((cur_jobid,subprocess.Popen(cjob,shell=True),ctype))
+    if options.mock:
+      print "launching cjob";
+    else:
+      external_jobs.append((cur_jobid,subprocess.Popen(cjob,shell=True),ctype))
 
 def wait_external_jobs():
   global external_jobs,free_ids
@@ -460,11 +463,17 @@ srange2=str(tstart2)+":"+str(tend2)
 print ""
 outfilename = options.tmp+"/"+timestamp+"_soap_input.txt"
 print ""+timeString()+" Creating temporary file with sequences:",outfilename
-outfile = open(outfilename,'w')
+if not options.mock:
+  outfile = open(outfilename,'w')
+else:
+  outfile = None;
 if reads == 2:
   outfilename_r2 = options.tmp+"/"+timestamp+"_soap_input_2.txt"
   print ""+timeString()+" Creating temporary file with sequences:",outfilename_r2
-  outfile_r2 = open(outfilename_r2,'w')
+  if not options.mock:
+    outfile_r2 = open(outfilename_r2,'w')
+  else:
+    outfile_r2 = None;
 else: # SHOULD NEVER BE NECCESSARY
   outfile_r2 = outfile
 
@@ -473,202 +482,205 @@ else: # SHOULD NEVER BE NECCESSARY
 ##################################
 
 had_training_sequences = False
-for lane in lanes:
-  slane = str(lane)
-  files = []
-  first_read = []
-  second_read = []
-  index_read2 = False
-  ctype = None
-  min_bcl,max_bcl = 1,None
+if not options.mock:
+  for lane in lanes:
+    slane = str(lane)
+    files = []
+    first_read = []
+    second_read = []
+    index_read2 = False
+    ctype = None
+    min_bcl,max_bcl = 1,None
 
-  #DETECT FILE TYPE, sets first_read variable
-  for tile in tiles:
-    nr = "%04d"%tile
-    if os.path.isfile(options.path+"/s_"+slane+"_1_"+nr+"_qseq.txt") and (ctype == None or ctype == "qseq"):
-      first_read.append(options.path+"/s_"+slane+"_1_"+nr+"_qseq.txt")
-      ctype = "qseq"
-    if os.path.isfile(options.path+"/s_"+slane+"_3_"+nr+"_qseq.txt") and (ctype == None or ctype == "qseq"):
-      second_read.append(options.path+"/s_"+slane+"_3_"+nr+"_qseq.txt")
-      index_read2 = True
-      ctype = "qseq"
-    elif os.path.isfile(options.path+"/s_"+slane+"_2_"+nr+"_qseq.txt") and (ctype == None or ctype == "qseq") and (reads == 2):
-      second_read.append(options.path+"/s_"+slane+"_2_"+nr+"_qseq.txt")
-      ctype = "qseq"
-    elif os.path.isfile(options.path+"/s_"+slane+"_2_"+nr+"_qseq.txt") and (ctype == None or ctype == "qseq") and (reads == 1):
-      index_read2 = True
+    #DETECT FILE TYPE, sets first_read variable
+    for tile in tiles:
+      nr = "%04d"%tile
+      if os.path.isfile(options.path+"/s_"+slane+"_1_"+nr+"_qseq.txt") and (ctype == None or ctype == "qseq"):
+        first_read.append(options.path+"/s_"+slane+"_1_"+nr+"_qseq.txt")
+        ctype = "qseq"
+      if os.path.isfile(options.path+"/s_"+slane+"_3_"+nr+"_qseq.txt") and (ctype == None or ctype == "qseq"):
+        second_read.append(options.path+"/s_"+slane+"_3_"+nr+"_qseq.txt")
+        index_read2 = True
+        ctype = "qseq"
+      elif os.path.isfile(options.path+"/s_"+slane+"_2_"+nr+"_qseq.txt") and (ctype == None or ctype == "qseq") and (reads == 2):
+        second_read.append(options.path+"/s_"+slane+"_2_"+nr+"_qseq.txt")
+        ctype = "qseq"
+      elif os.path.isfile(options.path+"/s_"+slane+"_2_"+nr+"_qseq.txt") and (ctype == None or ctype == "qseq") and (reads == 1):
+        index_read2 = True
 
-    if os.path.isfile(options.path+"/L%03d/C1.1/s_%d_%d.bcl"%(lane,lane,tile)) and (ctype == None or ctype == "bcl"):
-      if max_bcl == None:
-        max_bcl = max(map(lambda x: int(x[1:-2]),filter(lambda x: x.startswith("C") and x.endswith(".1") and os.path.isdir(options.path+"/L%03d/"%lane+x), os.listdir(options.path+"/L%03d/"%lane))))
-      first_read.append(options.path+";%d;%d;%d;%d"%(lane,tile,min_bcl,max_bcl))
-      ctype = "bcl"
+      if os.path.isfile(options.path+"/L%03d/C1.1/s_%d_%d.bcl"%(lane,lane,tile)) and (ctype == None or ctype == "bcl"):
+        if max_bcl == None:
+          max_bcl = max(map(lambda x: int(x[1:-2]),filter(lambda x: x.startswith("C") and x.endswith(".1") and os.path.isdir(options.path+"/L%03d/"%lane+x), os.listdir(options.path+"/L%03d/"%lane))))
+        first_read.append(options.path+";%d;%d;%d;%d"%(lane,tile,min_bcl,max_bcl))
+        ctype = "bcl"
 
-    if os.path.isfile(options.path+"/s_"+slane+"_"+nr+"_seq.txt") and os.path.isfile(options.path+"/s_"+slane+"_"+nr+"_prb.txt") and (ctype == None or ctype == "seq"):
-      first_read.append(options.path+"/s_"+slane+"_"+nr+"_seq.txt,None") #options.path+"/s_"+slane+"_"+nr+"_prb.txt"
-      ctype = "seq"
-    if os.path.isfile(options.path+"/s_"+slane+"_"+nr+"_seq.txt") and (not os.path.isfile(options.path+"/s_"+slane+"_"+nr+"_prb.txt")) and (ctype == None or ctype == "seq"):
-      first_read.append(options.path+"/s_"+slane+"_"+nr+"_seq.txt,None")
-      ctype = "seq"
+      if os.path.isfile(options.path+"/s_"+slane+"_"+nr+"_seq.txt") and os.path.isfile(options.path+"/s_"+slane+"_"+nr+"_prb.txt") and (ctype == None or ctype == "seq"):
+        first_read.append(options.path+"/s_"+slane+"_"+nr+"_seq.txt,None") #options.path+"/s_"+slane+"_"+nr+"_prb.txt"
+        ctype = "seq"
+      if os.path.isfile(options.path+"/s_"+slane+"_"+nr+"_seq.txt") and (not os.path.isfile(options.path+"/s_"+slane+"_"+nr+"_prb.txt")) and (ctype == None or ctype == "seq"):
+        first_read.append(options.path+"/s_"+slane+"_"+nr+"_seq.txt,None")
+        ctype = "seq"
 
-    if os.path.isfile(options.path+"/s_"+slane+"_"+nr+".fastq") and (ctype == None or ctype == "fastq"):
-      first_read.append(options.path+"/s_"+slane+"_"+nr+".fastq")
-      ctype = "fastq"
-    if os.path.isfile(options.path+"/s_"+slane+"_1_"+nr+".fastq") and (ctype == None or ctype == "fastq"):
-      first_read.append(options.path+"/s_"+lane+"_1_"+nr+".fastq")
-      ctype = "fastq"
-    if os.path.isfile(options.path+"/s_"+slane+"_3_"+nr+".fastq") and (ctype == None or ctype == "fastq"):
-      second_read.append(options.path+"/s_"+slane+"_3_"+nr+".fastq")
-      index_read2 = True
-      ctype = "fastq"
-    elif os.path.isfile(options.path+"/s_"+slane+"_2_"+nr+".fastq") and (ctype == None or ctype == "fastq") and (reads == 2):
-      second_read.append(options.path+"/s_"+slane+"_2_"+nr+".fastq")
-      ctype = "fastq"
-    elif os.path.isfile(options.path+"/s_"+slane+"_2_"+nr+".fastq") and (ctype == None or ctype == "fastq") and (reads == 1):
-      index_read2 = True
+      if os.path.isfile(options.path+"/s_"+slane+"_"+nr+".fastq") and (ctype == None or ctype == "fastq"):
+        first_read.append(options.path+"/s_"+slane+"_"+nr+".fastq")
+        ctype = "fastq"
+      if os.path.isfile(options.path+"/s_"+slane+"_1_"+nr+".fastq") and (ctype == None or ctype == "fastq"):
+        first_read.append(options.path+"/s_"+lane+"_1_"+nr+".fastq")
+        ctype = "fastq"
+      if os.path.isfile(options.path+"/s_"+slane+"_3_"+nr+".fastq") and (ctype == None or ctype == "fastq"):
+        second_read.append(options.path+"/s_"+slane+"_3_"+nr+".fastq")
+        index_read2 = True
+        ctype = "fastq"
+      elif os.path.isfile(options.path+"/s_"+slane+"_2_"+nr+".fastq") and (ctype == None or ctype == "fastq") and (reads == 2):
+        second_read.append(options.path+"/s_"+slane+"_2_"+nr+".fastq")
+        ctype = "fastq"
+      elif os.path.isfile(options.path+"/s_"+slane+"_2_"+nr+".fastq") and (ctype == None or ctype == "fastq") and (reads == 1):
+        index_read2 = True
 
-  start2ndread=None
-  second_in_first = ((len(second_read) == 0) and (reads == 2))
-  file_reader = None
-  file_reader_type = "none"
+    start2ndread=None
+    second_in_first = ((len(second_read) == 0) and (reads == 2))
+    file_reader = None
+    file_reader_type = "none"
 
-  #using first_read 
-  # DO SOME AUTODETECTION OF PARAMETERS (FIRST READ FILES)
-  if len(first_read) > 0:
-    had_training_sequences = True
-    filename = first_read[0]
-    if filename.endswith("qseq.txt"):
-      file_reader = Reader.read_qseq_file
-      file_reader_type = "qseq"
-    elif filename.endswith("fastq"):
-      file_reader = Reader.read_fastq_file
-      file_reader_type = "fastq"
-    elif ";" in filename:
-      file_reader = Reader.read_bcl_tile
-      file_reader_type = "bcl"
-    elif "," in filename:
-      file_reader = Reader.read_seq_prb_file
-      file_reader_type = "seq_prb"
-    else:
-      print "Unexpected content of file list."
-      sys.exit()
-    for name,seqorg,qualorg in file_reader(filename):
-      name = ":".join(name)
-      if index_read2:
-         for iname,iseqorg,iqualorg in file_reader(filename.replace("s_"+slane+"_1_","s_"+slane+"_2_")):
-           start2ndread=len(seqorg)+len(iseqorg)
-           break
-      elif (start2ndread == None) and (tend == None):
-        tend = len(seqorg)
-        srange1 = str(tstart)+":"+str(tend)
-      elif (start2ndread == None) and (tend != None):
-        start2ndread = tend+options.indexlength
-      if tend == None:
-        tend = len(seqorg)
-        srange1 = str(tstart)+":"+str(tend)
-      if start2ndread == None: start2ndread=max(len(seqorg),tstart2)
-
-      seq=seqorg[tstart:tend] #original sequence
-      if len(seq) != tend-tstart:
-        print "Length ranges defined do not match length of sequences."
+    #using first_read 
+    # DO SOME AUTODETECTION OF PARAMETERS (FIRST READ FILES)
+    if len(first_read) > 0:
+      had_training_sequences = True
+      filename = first_read[0]
+      if filename.endswith("qseq.txt"):
+        file_reader = Reader.read_qseq_file
+        file_reader_type = "qseq"
+      elif filename.endswith("fastq"):
+        file_reader = Reader.read_fastq_file
+        file_reader_type = "fastq"
+      elif ";" in filename:
+        file_reader = Reader.read_bcl_tile
+        file_reader_type = "bcl"
+      elif "," in filename:
+        file_reader = Reader.read_seq_prb_file
+        file_reader_type = "seq_prb"
+      else:
+        print "Unexpected content of file list."
         sys.exit()
-      frags=len(seq)//((len(seq)//max_length_soap)+1)
-      outseqs = []
-      while len(seq) > 0:
-        if len(seq) <= max_length_soap:
-          cseq = seq
-          seq = ""
-        else:
-          cseq = seq[:frags]
-          seq = seq[frags:]
-        outseqs.append(cseq)
-      if max_frags_created < len(outseqs): max_frags_created=len(outseqs) #number of chunks of length max_length_soap for soap
+      for name,seqorg,qualorg in file_reader(filename):
+        name = ":".join(name)
+        if index_read2:
+           for iname,iseqorg,iqualorg in file_reader(filename.replace("s_"+slane+"_1_","s_"+slane+"_2_")):
+             start2ndread=len(seqorg)+len(iseqorg)
+             break
+        elif (start2ndread == None) and (tend == None):
+          tend = len(seqorg)
+          srange1 = str(tstart)+":"+str(tend)
+        elif (start2ndread == None) and (tend != None):
+          start2ndread = tend+options.indexlength
+        if tend == None:
+          tend = len(seqorg)
+          srange1 = str(tstart)+":"+str(tend)
+        if start2ndread == None: start2ndread=max(len(seqorg),tstart2)
 
-      if second_in_first:
-        seq = seqorg[tstart2:tend2]
-        if len(seq) != tend2-tstart2:
+        seq=seqorg[tstart:tend] #original sequence
+        if len(seq) != tend-tstart:
           print "Length ranges defined do not match length of sequences."
           sys.exit()
         frags=len(seq)//((len(seq)//max_length_soap)+1)
         outseqs = []
         while len(seq) > 0:
           if len(seq) <= max_length_soap:
-            cseq = seq  #cseq = fragment
-            seq = ""    # seq = total seq
+            cseq = seq
+            seq = ""
           else:
             cseq = seq[:frags]
             seq = seq[frags:]
           outseqs.append(cseq)
         if max_frags_created < len(outseqs): max_frags_created=len(outseqs) #number of chunks of length max_length_soap for soap
 
-      break
+        if second_in_first:
+          seq = seqorg[tstart2:tend2]
+          if len(seq) != tend2-tstart2:
+            print "Length ranges defined do not match length of sequences."
+            sys.exit()
+          frags=len(seq)//((len(seq)//max_length_soap)+1)
+          outseqs = []
+          while len(seq) > 0:
+            if len(seq) <= max_length_soap:
+              cseq = seq  #cseq = fragment
+              seq = ""    # seq = total seq
+            else:
+              cseq = seq[:frags]
+              seq = seq[frags:]
+            outseqs.append(cseq)
+          if max_frags_created < len(outseqs): max_frags_created=len(outseqs) #number of chunks of length max_length_soap for soap
 
-  # DO SOME AUTODETECTION OF PARAMETERS (SECOND READ FILES)
-  if start2ndread == None: start2ndread = tend
-  if len(second_read) > 0:
-    filename = second_read[0]
-    if filename.endswith("qseq.txt"):
-      file_reader = Reader.read_qseq_file
-      file_reader_type = "qseq"
-    elif filename.endswith("fastq"):
-      file_reader = Reader.read_fastq_file
-      file_reader_type = "fastq"
-    elif "," in filename:
-      file_reader = Reader.read_seq_prb_file
-      file_reader_type = "seq_prb"
-    else:
-      print "Unexpected content of file list."
-      sys.exit()
+        break
 
-    for name,seqorg,qualorg in file_reader(filename):
-      if tend2 == None:
-        tend2 = start2ndread+len(seqorg)
-        tstart2 = start2ndread
-        srange2=str(tstart2)+":"+str(tend2)
-      seq=seqorg[max(tstart2-start2ndread,0):max(tend2-start2ndread,0)]
-      if len(seq) != max(tend2-start2ndread,0)-max(tstart2-start2ndread,0):
-        print "Length ranges defined do not match length of sequences."
+    # DO SOME AUTODETECTION OF PARAMETERS (SECOND READ FILES)
+    if start2ndread == None: start2ndread = tend
+    if len(second_read) > 0:
+      filename = second_read[0]
+      if filename.endswith("qseq.txt"):
+        file_reader = Reader.read_qseq_file
+        file_reader_type = "qseq"
+      elif filename.endswith("fastq"):
+        file_reader = Reader.read_fastq_file
+        file_reader_type = "fastq"
+      elif "," in filename:
+        file_reader = Reader.read_seq_prb_file
+        file_reader_type = "seq_prb"
+      else:
+        print "Unexpected content of file list."
         sys.exit()
-      frags=len(seq)//((len(seq)//max_length_soap)+1)
-      outseqs = []
-      while len(seq) > 0:
-        if len(seq) <= max_length_soap:
-          cseq = seq
-          seq = ""
-        else:
-          cseq = seq[:frags]
-          seq = seq[frags:]
-        outseqs.append(cseq)
-      if max_frags_created < len(outseqs): max_frags_created=len(outseqs)
 
-      break
+      for name,seqorg,qualorg in file_reader(filename):
+        if tend2 == None:
+          tend2 = start2ndread+len(seqorg)
+          tstart2 = start2ndread
+          srange2=str(tstart2)+":"+str(tend2)
+        seq=seqorg[max(tstart2-start2ndread,0):max(tend2-start2ndread,0)]
+        if len(seq) != max(tend2-start2ndread,0)-max(tstart2-start2ndread,0):
+          print "Length ranges defined do not match length of sequences."
+          sys.exit()
+        frags=len(seq)//((len(seq)//max_length_soap)+1)
+        outseqs = []
+        while len(seq) > 0:
+          if len(seq) <= max_length_soap:
+            cseq = seq
+            seq = ""
+          else:
+            cseq = seq[:frags]
+            seq = seq[frags:]
+          outseqs.append(cseq)
+        if max_frags_created < len(outseqs): max_frags_created=len(outseqs)
 
-  # PROCESS FIRST READ FILES EXTERNAL
-  # will launch create createTrainingSeqs_helper.py for each tile, this will produce the 
-  # soap input with the suffix in the sequence 1/3, 2/3, 3/3
-  # first_read contains the prefix of the folder with the bcl calls
-  # and the lane + tile number to use
-  for filename in first_read: 
-    print "Reading",filename
-    if second_in_first:
-      eval_file(filename,file_reader_type,tstart,tend,srange1,start2=tstart2,end2=tend2,srange2=srange2) 
-    else:
-      if index_read2: eval_file(filename,file_reader_type,tstart,tend,srange1,index_seq="2")
-      else: eval_file(filename,file_reader_type,tstart,tend,srange1)
+        break
 
-  # PROCESS SECOND READ FILES EXTERNAL
-  #See description in first_read
-  for filename in second_read:
-    print "Reading",filename
-    if index_read2:
-      eval_file(filename,file_reader_type,max(tstart2-start2ndread,0),max(tend2-start2ndread,0),srange2,isread2=True,index_seq="2")
-    else:
-      eval_file(filename,file_reader_type,max(tstart2-start2ndread,0),max(tend2-start2ndread,0),srange2,isread2=True,index_seq="1")
+    # PROCESS FIRST READ FILES EXTERNAL
+    # will launch create createTrainingSeqs_helper.py for each tile, this will produce the 
+    # soap input with the suffix in the sequence 1/3, 2/3, 3/3
+    # first_read contains the prefix of the folder with the bcl calls
+    # and the lane + tile number to use
+    for filename in first_read: 
+      print "Reading",filename
+      if second_in_first:
+        eval_file(filename,file_reader_type,tstart,tend,srange1,start2=tstart2,end2=tend2,srange2=srange2) 
+      else:
+        if index_read2: eval_file(filename,file_reader_type,tstart,tend,srange1,index_seq="2")
+        else: eval_file(filename,file_reader_type,tstart,tend,srange1)
 
-  wait_external_jobs()
+    # PROCESS SECOND READ FILES EXTERNAL
+    #See description in first_read
+    for filename in second_read:
+      print "Reading",filename
+      if index_read2:
+        eval_file(filename,file_reader_type,max(tstart2-start2ndread,0),max(tend2-start2ndread,0),srange2,isread2=True,index_seq="2")
+      else:
+        eval_file(filename,file_reader_type,max(tstart2-start2ndread,0),max(tend2-start2ndread,0),srange2,isread2=True,index_seq="1")
 
-outfile.close()
-if reads == 2: outfile_r2.close()
+    wait_external_jobs()
+
+  outfile.close()
+  if reads == 2: outfile_r2.close()
+else:
+  had_training_sequences=True;
 
 if not had_training_sequences:
   print "Did not read a single input file. Check path to Bustard folder:", options.path
@@ -680,7 +692,7 @@ seed_length2 = seed_length
 if reads == 2:
   seed_length2 = max(6,min(12,(min(tend2-tstart2,max_length_soap)-3)//2))
 
-if options.mock: sys.exit()
+#if options.mock: sys.exit()
 
 ##
 #
@@ -695,59 +707,22 @@ print ""
 print "Calling SOAP..."+timeString();
 outfilename2 = options.tmp+"/"+timestamp+"_soap_output.txt"
 cmdline = options.soap+" -s "+str(seed_length)+" -d "+options.reference+" -a "+outfilename+" -v "+str(options.mismatch)+" -g 0 -c 0 -w 1 -r 1 -p "+str(options.cores)+" -o "+outfilename2
-print cmdline
-proc = subprocess.Popen(cmdline,shell=True)
-proc.wait()
+print "Launching "+cmdline;
+if not options.mock:
+  proc = subprocess.Popen(cmdline,shell=True)
+  proc.wait()
 
 print "Begin masking..."+timeString();
 
 #MASKING
 setMaskedPositions = {}; 
-
-cmdline = def_ibis_path+"soap2masked.py -q "+str(def_qualityForMask)+" -p "+str(def_percentageForMask)+" -r "+options.reference+" -f "+outfilename2+" -o "+options.outfile;
-print cmdline
-proc = subprocess.Popen(cmdline,shell=True)
-proc.wait()
-
-fileHandleMasking = open ( options.outfile+".mask" );
-while 1:
-  line = fileHandleMasking.readline();
-  if(not(line)):
-    break
-  line = line.rstrip();
-  try:
-    controlName = line.split("\t")[0];
-    maskPos     = int(line.split("\t")[1]);
-  except:
-    print "Verify the output of the soap2masked.py script in "+options.outfile+".mask";
-    sys.exit()
-
-  if(controlName in setMaskedPositions):
-    setMaskedPositions[controlName].add(maskPos);
-  else:
-    setMaskedPositions[controlName]=set([maskPos]);
-
-fileHandleMasking.close();
-print "Done masking..."+timeString();
-#END MASKING
-
-if reads == 2:
-  print "Calling SOAP..."+timeString();
-  outfilename2_r2 = options.tmp+"/"+timestamp+"_soap_output_2.txt"
-  cmdline = options.soap+" -s "+str(seed_length2)+" -d "+options.reference+" -a "+outfilename_r2+" -v "+str(options.mismatch)+" -g 0 -c 0 -w 1 -r 1 -p "+str(options.cores)+" -o "+outfilename2_r2
+if(not options.nomask):
+  cmdline = def_ibis_path+"soap2masked.py -q "+str(def_qualityForMask)+" -p "+str(def_percentageForMask)+" -r "+options.reference+" -f "+outfilename2+" -o "+options.outfile;
   print cmdline
   proc = subprocess.Popen(cmdline,shell=True)
   proc.wait()
 
-  #MASKING
-  print "Begin masking..."+timeString();
-  cmdline = def_ibis_path+"soap2masked.py -q "+str(def_qualityForMask)+" -p "+str(def_percentageForMask)+" -r "+options.reference+" -f "+outfilename2_r2+" -o "+options.outfile+"_r2";
-  print cmdline
-  proc = subprocess.Popen(cmdline,shell=True)
-  proc.wait()
-  
-
-  fileHandleMasking = open ( options.outfile+"_r2.mask" );
+  fileHandleMasking = open ( options.outfile+".mask" );
   while 1:
     line = fileHandleMasking.readline();
     if(not(line)):
@@ -757,7 +732,7 @@ if reads == 2:
       controlName = line.split("\t")[0];
       maskPos     = int(line.split("\t")[1]);
     except:
-      print "Verify the output of the soap2masked.py script in "+options.outfile+"_r2.mask";
+      print "Verify the output of the soap2masked.py script in "+options.outfile+".mask";
       sys.exit()
 
     if(controlName in setMaskedPositions):
@@ -765,9 +740,50 @@ if reads == 2:
     else:
       setMaskedPositions[controlName]=set([maskPos]);
 
-
   fileHandleMasking.close();
   print "Done masking..."+timeString();
+  #END MASKING
+
+if reads == 2:
+  print "Calling SOAP..."+timeString();
+  outfilename2_r2 = options.tmp+"/"+timestamp+"_soap_output_2.txt"
+  cmdline = options.soap+" -s "+str(seed_length2)+" -d "+options.reference+" -a "+outfilename_r2+" -v "+str(options.mismatch)+" -g 0 -c 0 -w 1 -r 1 -p "+str(options.cores)+" -o "+outfilename2_r2
+
+  print "Launching "+cmdline;
+  if not options.mock:
+    proc = subprocess.Popen(cmdline,shell=True)
+    proc.wait()
+
+  #MASKING
+  if(not options.nomask):
+    print "Begin masking..."+timeString();
+    cmdline = def_ibis_path+"soap2masked.py -q "+str(def_qualityForMask)+" -p "+str(def_percentageForMask)+" -r "+options.reference+" -f "+outfilename2_r2+" -o "+options.outfile+"_r2";
+    print cmdline
+    proc = subprocess.Popen(cmdline,shell=True)
+    proc.wait()
+
+
+    fileHandleMasking = open ( options.outfile+"_r2.mask" );
+    while 1:
+      line = fileHandleMasking.readline();
+      if(not(line)):
+        break
+      line = line.rstrip();
+      try:
+        controlName = line.split("\t")[0];
+        maskPos     = int(line.split("\t")[1]);
+      except:
+        print "Verify the output of the soap2masked.py script in "+options.outfile+"_r2.mask";
+        sys.exit()
+
+      if(controlName in setMaskedPositions):
+        setMaskedPositions[controlName].add(maskPos);
+      else:
+        setMaskedPositions[controlName]=set([maskPos]);
+
+
+    fileHandleMasking.close();
+    print "Done masking..."+timeString();
   #END MASKING
 
 
@@ -787,57 +803,59 @@ if not options.keep:
 print ""
 print "Reading reference to memory..."+timeString();
 seq_dict = {}
-for title,seq in Reader.read_fasta(options.reference):
-  seq=list(seq);
-  if(options.nomask):
-    print "Found "+str(len(setMaskedPositions[title.split()[0]]))+" variable positions out of "+str(len(seq))+" for "+title.split()[0];
-  else:
-    if(title.split()[0] in setMaskedPositions):
-      print "Masking "+str(len(setMaskedPositions[title.split()[0]]))+" positions out of "+str(len(seq))+" for "+title.split()[0];
-      for maskPos in setMaskedPositions[title.split()[0]]:   
-        seq[maskPos]="N";
+if not options.mock:
+  for title,seq in Reader.read_fasta(options.reference):
+    seq=list(seq);
+    if(options.nomask):
+      print "Found "+str(len(seq))+" positions for "+title.split()[0];
     else:
-      print "Masking 0 positions out of "+str(len(seq))+" for "+title.split()[0];
+      if(title.split()[0] in setMaskedPositions):
+        print "Masking "+str(len(setMaskedPositions[title.split()[0]]))+" positions out of "+str(len(seq))+" for "+title.split()[0];
+        for maskPos in setMaskedPositions[title.split()[0]]:   
+          seq[maskPos]="N";
+      else:
+        print "Masking 0 positions out of "+str(len(seq))+" for "+title.split()[0];
 
-  seq="".join(seq);
-  seq_dict[title.split()[0]]=seq
+    seq="".join(seq);
+    seq_dict[title.split()[0]]=seq
 
 
 
 print ""
 delta_bases = tend-tstart
-print "Will extract",delta_bases,"bases from reference for mapped reads."
-if (max_frags_created > 1) and (options.cores > 1):
-   print "Sorting SOAP output by sequence ID"
-   proc = subprocess.Popen("sort -T %s %s > %s_sort"%(options.tmp,outfilename2,outfilename2),shell=True)
-   proc.wait()
-   proc = subprocess.Popen("mv %s_sort %s"%(outfilename2,outfilename2),shell=True)
-   proc.wait()
-print "Iterating over SOAP output file"
-count = eval_soap_output(outfilename2,options.outfile,seq_dict,delta_bases,options)
-if not options.keep:
-  print "Removing temporary SOAP output file",outfilename2
-  proc = subprocess.Popen("rm -f "+outfilename2,shell=True)
-print ""
-print count,"training sequences available in",options.outfile
-
-if reads == 2:
-  print ""
-  delta_bases = tend2-tstart2
-  print "Will extract",delta_bases,"bases from reference for mapped reads of second read."
+print "Will extract ",delta_bases," bases from reference for mapped reads."
+if not options.mock:
   if (max_frags_created > 1) and (options.cores > 1):
-    print "Sorting SOAP output by sequence ID for second read"
-    proc = subprocess.Popen("sort -T %s %s > %s_sort"%(options.tmp,outfilename2_r2,outfilename2_r2),shell=True)
-    proc.wait()
-    proc = subprocess.Popen("mv %s_sort %s"%(outfilename2_r2,outfilename2_r2),shell=True)
-    proc.wait()
+     print "Sorting SOAP output by sequence ID"
+     proc = subprocess.Popen("sort -T %s %s > %s_sort"%(options.tmp,outfilename2,outfilename2),shell=True)
+     proc.wait()
+     proc = subprocess.Popen("mv %s_sort %s"%(outfilename2,outfilename2),shell=True)
+     proc.wait()
   print "Iterating over SOAP output file"
-  count = eval_soap_output(outfilename2_r2,options.outfile+"_r2",seq_dict,delta_bases,options)
+  count = eval_soap_output(outfilename2,options.outfile,seq_dict,delta_bases,options)
   if not options.keep:
-    print "Removing temporary SOAP output file",outfilename2_r2
-    proc = subprocess.Popen("rm -f "+outfilename2_r2,shell=True)
+    print "Removing temporary SOAP output file",outfilename2
+    proc = subprocess.Popen("rm -f "+outfilename2,shell=True)
   print ""
-  print count,"training sequences available in",options.outfile+"_r2"
+  print count,"training sequences available in",options.outfile
+
+  if reads == 2:
+    print ""
+    delta_bases = tend2-tstart2
+    print "Will extract",delta_bases,"bases from reference for mapped reads of second read."
+    if (max_frags_created > 1) and (options.cores > 1):
+      print "Sorting SOAP output by sequence ID for second read"
+      proc = subprocess.Popen("sort -T %s %s > %s_sort"%(options.tmp,outfilename2_r2,outfilename2_r2),shell=True)
+      proc.wait()
+      proc = subprocess.Popen("mv %s_sort %s"%(outfilename2_r2,outfilename2_r2),shell=True)
+      proc.wait()
+    print "Iterating over SOAP output file"
+    count = eval_soap_output(outfilename2_r2,options.outfile+"_r2",seq_dict,delta_bases,options)
+    if not options.keep:
+      print "Removing temporary SOAP output file",outfilename2_r2
+      proc = subprocess.Popen("rm -f "+outfilename2_r2,shell=True)
+    print ""
+    print count,"training sequences available in",options.outfile+"_r2"
 
 
 print "Done creating training sets "+timeString();

@@ -66,17 +66,27 @@ def read_cif(filename,clusteridx=None):
   infile = open(filename,'rb')
   brange = range(nbases)
   try:
-    CIFstr = infile.read(3)
+    CIFstr = infile.read(3)               #dummy value
     if CIFstr == "CIF":
-      version = infile.read(1)
-      #print "CIF version",ord(version)
-      blocksize = ord(infile.read(1))
-      #print "Block size",blocksize
-      firstcycle = to_int(infile.read(2))
-      nrcycles = to_int(infile.read(2))
-      nrclusters = to_int(infile.read(4))
+      version = infile.read(1)            #version
+      blocksize = ord(infile.read(1))     #precision
+      firstcycle = to_int(infile.read(2)) #cycle unsigned short
+      nrcycles = to_int(infile.read(2))   #1
+      nrclusters = to_int(infile.read(4)) #cluster count unsigned int
       data = infile.read()
-      if len(data) == nbases * nrclusters * blocksize:
+      #print "CIF version",ord(version)
+      #print "Block size",blocksize
+      #print "filename "+str(filename);
+      #print "len(data) "+str(len(data));
+      #print "nbases    "+str(nbases);
+      #print "nrcycles    "+str(nrcycles);
+      #print "nrclusters    "+str(nrclusters);
+      #print "blocksize    "+str(blocksize);
+
+      if len(data) >= (nbases * nrclusters * blocksize):
+        if len(data) > (nbases * nrclusters * blocksize):
+          print "File "+str(filename)+" seems to have more data than predicted, predicted="+str(nbases * nrclusters* blocksize)+" bytes observed="+str( len(data) );
+
         #print "Data read fits with estimate."
 
         # EITHER ALL, OR ONLY CLUSTER SPECIFIED ARE EXTRACTED
@@ -93,7 +103,8 @@ def read_cif(filename,clusteridx=None):
           else:
             yield res
       else:
-        print "File content does not reflect number of cycles and channels.",nbases * nrclusters,len(data)
+        print "File "+str(filename)+" seems truncated, content does not reflect predicted size, predicted="+str(nbases * nrclusters* blocksize)+" bytes observed="+str( len(data) );
+
     else:
       print "No valid CIF file"
   except IOError:
