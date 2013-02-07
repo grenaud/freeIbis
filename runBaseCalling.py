@@ -109,6 +109,7 @@ group.add_option("--coordianteType", dest="coordtype", help="Type of cluster coo
 group.add_option("--temp", dest="tmp", help="Path to temporary folder (default "+def_temp+")",default=def_temp)
 group.add_option("--NoTestDataSet", dest="NoTestDataSet", help="Don't separate data for a test data set",action="store_true",default=False)
 group.add_option("--mock", dest="mock", help="Do a mock run for testing",default=False,action="store_true")
+group.add_option("--lock", dest="lock", help="Use a .lock file to avoid basecalling a run twice",default=False,action="store_true")
 group.add_option("--quick", dest="quick", help="Use logistic regression for prediction instead of SVMs, quicker but less accurate",action="store_true",default=False)
 parser.add_option_group(group)
 
@@ -151,6 +152,9 @@ parser.add_option_group(group)
 
 
 (options, args) = parser.parse_args()
+
+
+
 
 jobs = []
 
@@ -195,6 +199,19 @@ else:
     sys.exit()
 options.outpath=options.outpath.rstrip("/")
 options.outpath+="/"
+
+if (options.lock):
+  if(os.path.isfile(options.outpath+".ibislock")): #already an instance running
+    print "Another instance of freeIbis appears to be running and writing (found file : "+str(options.outpath+".ibislock")+")\nWill sleep until this lock file is removed\nIf you think this file is there by mistake, kill the current freeIbis, delete file and restart the basecalling\n";
+    while(os.path.isfile(options.outpath+".ibislock")):
+      time.sleep(100)
+    sys.exit(0); #terminated gracefully
+  else: #create lock file
+    fileHandleWrite = open ( options.outpath+".ibislock", 'w' ) ;
+    fileHandleWrite.write("");
+    fileHandleWrite.close();
+
+
 
 if not os.path.isdir(options.tmp):
   print "Need valid path for temporary files"
@@ -440,6 +457,14 @@ elif not os.path.isfile(modeldir+"SVMlight_models.index"):
   print "Training models failed. Check parameters."
 
 timeAfterPred= time.time();
+
+
+if (options.lock):
+  os.remove(  options.outpath+".ibislock" ) ;
+  
+
+
+
 #if not options.mock:
 #  print "Time to create training sets : "+str(timeAfterSetsBefTraining-timeBeforeTrainingSets)+" s";
 #  print "Time to train                : "+str(timeAfterTrainingBeforePred-timeAfterSetsBefTraining)+" s";
