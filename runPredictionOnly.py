@@ -635,7 +635,7 @@ if os.path.isfile(modeldir+"SVMlight_models.index"):
 
   if not options.mock:
     for lane in lanes:
-      outfile = open(svmpath+"s_"+str(lane)+"_finished.txt",'w');       
+      outfile = open(svmpath+"s_"+str(lane)+"_sequence.bam.finished",'w');       
       outfile.close();
   print "Per lane raw sequence files created."+timeString();
 else:
