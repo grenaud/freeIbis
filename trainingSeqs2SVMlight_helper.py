@@ -84,8 +84,8 @@ def read_cif(filename,clusteridx=None):
       #print "blocksize    "+str(blocksize);
 
       if len(data) >= (nbases * nrclusters * blocksize):
-        if len(data) > (nbases * nrclusters * blocksize):
-          print "File "+str(filename)+" seems to have more data than predicted, predicted="+str(nbases * nrclusters* blocksize)+" bytes observed="+str( len(data) );
+        #if len(data) > (nbases * nrclusters * blocksize):
+        #  print "File "+str(filename)+" seems to have more data than predicted, predicted="+str(nbases * nrclusters* blocksize)+" bytes observed="+str( len(data) );
 
         #print "Data read fits with estimate."
 
@@ -99,7 +99,7 @@ def read_cif(filename,clusteridx=None):
           pos = cluster*blocksize
           res = map(lambda x:to_int(data[x*jump+pos:x*jump+pos+blocksize],True),brange)
           if None in res:
-            yield [0]*nbases;
+            yield [0]*nbases
           else:
             yield res
       else:
@@ -126,10 +126,13 @@ def read_locs(filename):
   infile = open(filename,'rb')
   infile.read(8) # First 8 Byte are unused
   clusters = to_int(infile.read(4))
-  binvalues = array.array('f')
-  binvalues.read(infile, clusters * 2)
-  data = N.array(binvalues, typecode=N.Float)
-  data = N.reshape(data, ( clusters ,2 ))
+  #Martin suggested that change: GR May 3 2013
+  #binvalues = array.array('f')
+  #binvalues.read(infile, clusters * 2)
+  #data = N.array(binvalues, typecode=N.Float)
+  #data = N.reshape(data, ( clusters ,2 ))
+  shape = (clusters,2)
+  data = numpy.fromfile(file=infile, dtype=numpy.float32).reshape(shape)
   for x,y in data:
     yield coordconv(x),coordconv(y)
   infile.close()
