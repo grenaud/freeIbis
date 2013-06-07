@@ -34,6 +34,15 @@ max_length_soap=60
 max_frags_created = 1 # DETERMINED FROM FIRST SEQUENCE OF FIRST AND SECOND READ
 
 
+def runcommand(commandline):
+    while 1:
+        jobcreated=subprocess.Popen(commandline,shell=True);
+        jobcreated.wait();
+        if(jobcreated.returncode == 0): #correct code
+            break;
+        print "WARNING: process "+str(commandline)+" failed, will be relaunched in 1m";
+        time.sleep(60);
+
 def timeString():
     return str(time.strftime(" on %d %b %Y %H:%M:%S", time.localtime())+" secs = "+str(time.time()));
 
@@ -709,8 +718,9 @@ outfilename2 = options.tmp+"/"+timestamp+"_soap_output.txt"
 cmdline = options.soap+" -s "+str(seed_length)+" -d "+options.reference+" -a "+outfilename+" -v "+str(options.mismatch)+" -g 0 -c 0 -w 1 -r 1 -p "+str(options.cores)+" -o "+outfilename2
 print "Launching "+cmdline;
 if not options.mock:
-  proc = subprocess.Popen(cmdline,shell=True)
-  proc.wait()
+  runcommand(cmdline);
+  #proc = subprocess.Popen(cmdline,shell=True)
+  #proc.wait()
 
 print "Begin masking..."+timeString();
 
@@ -719,8 +729,9 @@ setMaskedPositions = {};
 if(not options.nomask):
   cmdline = def_ibis_path+"soap2masked.py -q "+str(def_qualityForMask)+" -p "+str(def_percentageForMask)+" -r "+options.reference+" -f "+outfilename2+" -o "+options.outfile;
   print cmdline
-  proc = subprocess.Popen(cmdline,shell=True)
-  proc.wait()
+  runcommand(cmdline);
+  #proc = subprocess.Popen(cmdline,shell=True)
+  #proc.wait()
 
   fileHandleMasking = open ( options.outfile+".mask" );
   while 1:
@@ -751,16 +762,18 @@ if reads == 2:
 
   print "Launching "+cmdline;
   if not options.mock:
-    proc = subprocess.Popen(cmdline,shell=True)
-    proc.wait()
+    runcommand(cmdline);
+    #proc = subprocess.Popen(cmdline,shell=True)
+    #proc.wait()
 
   #MASKING
   if(not options.nomask):
     print "Begin masking..."+timeString();
     cmdline = def_ibis_path+"soap2masked.py -q "+str(def_qualityForMask)+" -p "+str(def_percentageForMask)+" -r "+options.reference+" -f "+outfilename2_r2+" -o "+options.outfile+"_r2";
     print cmdline
-    proc = subprocess.Popen(cmdline,shell=True)
-    proc.wait()
+    runcommand(cmdline);
+    #proc = subprocess.Popen(cmdline,shell=True)
+    #proc.wait()
 
 
     fileHandleMasking = open ( options.outfile+"_r2.mask" );
@@ -790,12 +803,14 @@ if reads == 2:
 if not options.keep:
   print ""
   print "Removing temporary SOAP input file:",outfilename
-  proc = subprocess.Popen("rm -f "+outfilename,shell=True)
-  proc.wait()
+  runcommand("rm -f "+outfilename);
+  #proc = subprocess.Popen("rm -f "+outfilename,shell=True)
+  #proc.wait()
   if reads == 2:
     print "Removing temporary SOAP input file:",outfilename_r2
-    proc = subprocess.Popen("rm -f "+outfilename_r2,shell=True)
-    proc.wait()
+    runcommand("rm -f "+outfilename_r2);
+    #proc = subprocess.Popen("rm -f "+outfilename_r2,shell=True)
+    #proc.wait()
 
 
 
@@ -827,15 +842,19 @@ print "Will extract ",delta_bases," bases from reference for mapped reads."
 if not options.mock:
   if (max_frags_created > 1) and (options.cores > 1):
      print "Sorting SOAP output by sequence ID"
-     proc = subprocess.Popen("sort -T %s %s > %s_sort"%(options.tmp,outfilename2,outfilename2),shell=True)
-     proc.wait()
-     proc = subprocess.Popen("mv %s_sort %s"%(outfilename2,outfilename2),shell=True)
-     proc.wait()
+     runcommand("sort -T %s %s > %s_sort"%(options.tmp,outfilename2,outfilename2) );
+     runcommand("mv %s_sort %s"%(outfilename2,outfilename2));
+     #proc = subprocess.Popen("sort -T %s %s > %s_sort"%(options.tmp,outfilename2,outfilename2),shell=True)
+     #proc.wait()
+     #proc = subprocess.Popen("mv %s_sort %s"%(outfilename2,outfilename2),shell=True)
+     #proc.wait()
   print "Iterating over SOAP output file"
   count = eval_soap_output(outfilename2,options.outfile,seq_dict,delta_bases,options)
   if not options.keep:
     print "Removing temporary SOAP output file",outfilename2
-    proc = subprocess.Popen("rm -f "+outfilename2,shell=True)
+    runcommand("rm -f "+outfilename2);
+    #proc = subprocess.Popen("rm -f "+outfilename2,shell=True)
+    
   print ""
   print count,"training sequences available in",options.outfile
 
@@ -845,15 +864,18 @@ if not options.mock:
     print "Will extract",delta_bases,"bases from reference for mapped reads of second read."
     if (max_frags_created > 1) and (options.cores > 1):
       print "Sorting SOAP output by sequence ID for second read"
-      proc = subprocess.Popen("sort -T %s %s > %s_sort"%(options.tmp,outfilename2_r2,outfilename2_r2),shell=True)
-      proc.wait()
-      proc = subprocess.Popen("mv %s_sort %s"%(outfilename2_r2,outfilename2_r2),shell=True)
-      proc.wait()
+      runcommand("sort -T %s %s > %s_sort"%(options.tmp,outfilename2_r2,outfilename2_r2));
+      runcommand("mv %s_sort %s"%(outfilename2_r2,outfilename2_r2));
+      #proc = subprocess.Popen("sort -T %s %s > %s_sort"%(options.tmp,outfilename2_r2,outfilename2_r2),shell=True)
+      #proc.wait()
+      #proc = subprocess.Popen("mv %s_sort %s"%(outfilename2_r2,outfilename2_r2),shell=True)
+      #proc.wait()
     print "Iterating over SOAP output file"
     count = eval_soap_output(outfilename2_r2,options.outfile+"_r2",seq_dict,delta_bases,options)
     if not options.keep:
       print "Removing temporary SOAP output file",outfilename2_r2
-      proc = subprocess.Popen("rm -f "+outfilename2_r2,shell=True)
+      runcommand("rm -f "+outfilename2_r2);
+      #proc = subprocess.Popen("rm -f "+outfilename2_r2,shell=True)      
     print ""
     print count,"training sequences available in",options.outfile+"_r2"
 

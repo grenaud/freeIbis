@@ -815,6 +815,9 @@ if(options.recalibration):
   arrayOfJobsToSend=[];
   for ind,file in enumerate(recal_names):
     if options.verbose: 
+      if(os.stat(options.tmp+"/"+timestamp+"_"+file+".out").st_size == 0):
+        print "The recalibration file : "+options.tmp+"/"+timestamp+"_"+file+".out is empty, calibration failed, please try again with either more control data or do not use calibrationy";
+        sys.exit(1);
       print "Calling",def_estimateError+"  "+options.tmp+"/"+timestamp+"_"+file+".out > "+options.tmp+"/"+timestamp+"_"+file+".est";
     #handle_jobs(def_estimateError+"  "+options.tmp+"/"+timestamp+"_"+file+".out > "+options.tmp+"/"+timestamp+"_"+file+".est");
     arrayOfJobsToSend.append(def_estimateError+"  "+options.tmp+"/"+timestamp+"_"+file+".out > "+options.tmp+"/"+timestamp+"_"+file+".est");
