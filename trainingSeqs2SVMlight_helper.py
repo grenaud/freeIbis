@@ -369,7 +369,7 @@ def eval_lines(trainlines,lane_tile,filestreams,crange):
       elif os.path.exists(options.path+"/L00%s/s_%s_%s.locs"%(lane,lane,tile.lstrip('0'))):
         filename = options.path+"/L00%s/s_%s_%s.locs"%(lane,lane,tile.lstrip('0'))
         infile = read_locs(filename)
-      elif os.path.exists(options.path+"/L00%s/s_%s_%s.locs"%(lane,lane,tile.lstrip('0'))):
+      elif os.path.exists(options.path+"/L00%s/s_%s_%s.clocs"%(lane,lane,tile.lstrip('0'))):
         filename = options.path+"/L00%s/s_%s_%s.clocs"%(lane,lane,tile.lstrip('0'))
         infile = read_clocs(filename)
       else:
