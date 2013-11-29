@@ -91,6 +91,7 @@ extern "C" {
 #include <string>
 #include <vector>
 
+#include <unistd.h>
 #include <libgen.h>
 #include <stdint.h>
 #include <sys/stat.h>

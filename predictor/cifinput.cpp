@@ -8,6 +8,7 @@
 #include <sstream>
 #include <vector>
 
+#include <unistd.h>
 #include <dirent.h>
 #include <fcntl.h>
 #include <fnmatch.h>
