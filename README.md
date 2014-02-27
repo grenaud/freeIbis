@@ -15,7 +15,7 @@ run the following commands:
 
 $ make
 
-This should build the required binaries for freeIbis.
+This should build the required binaries for freeIbis. Be sure you have bgzip (http://samtools.sourceforge.net/tabix.shtml ) installed and in your path as freeIbis requires this to generate bam files. Try typing "bgzip -h" to see if it works. 
 
 You may now edit params.py in the current directory to change default values.
 In most cases this is not necessary, however if your /tmp folder does not have
