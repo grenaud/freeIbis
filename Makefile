@@ -5,12 +5,12 @@ LDLIBS += -lm -lz
 LDFLAGS += -pthread
 #CFLAGS := -lm -msse -O3 -fPIC -fopenmp -fstrict-aliasing -fomit-frame-pointer -Wall
 
-all: LIBLINEAR LIBOCAS SOAP predictor/svm_libocas_classify qualrecal bcl2phix
+all: LIBLINEAR LIBOCAS SOAP predictor/svm_libocas_classify qualrecal BCL2PHIX
 
 qualrecal:
 	make -C qualRecal
 
-bcl2phix:
+BCL2PHIX:
 	make -C bcl2phix
 
 LIBOCAS: 
