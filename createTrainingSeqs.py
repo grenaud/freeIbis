@@ -490,6 +490,11 @@ else: # SHOULD NEVER BE NECCESSARY
 #  END   EVALUTATING PARAMETERS  #
 ##################################
 
+
+
+  
+
+
 had_training_sequences = False
 if not options.mock:
   for lane in lanes:
@@ -551,6 +556,15 @@ if not options.mock:
     file_reader = None
     file_reader_type = "none"
 
+    if(ctype == "bcl"):
+      cmd = def_extract_datasetBCL+" ";
+      for myarg in sys.argv[1:]:
+        cmd += myarg;
+        cmd += "  ";
+
+      print "running command for BCL "+str(cmd);
+      runcommand(cmd);
+      sys.exit(0);
     #using first_read 
     # DO SOME AUTODETECTION OF PARAMETERS (FIRST READ FILES)
     if len(first_read) > 0:
@@ -661,6 +675,7 @@ if not options.mock:
         if max_frags_created < len(outseqs): max_frags_created=len(outseqs)
 
         break
+
 
     # PROCESS FIRST READ FILES EXTERNAL
     # will launch create createTrainingSeqs_helper.py for each tile, this will produce the 

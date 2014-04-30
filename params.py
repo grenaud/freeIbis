@@ -23,8 +23,12 @@ def_soap_ref='/mnt/solexa/Genomes/phiX/phiX174.fa'
 
 def_bowtie_path='PATH_TO_BOWTIE/bowtie'
 def_bowtie_ref='/mnt/solexa/Genomes/phiX/bowtie'
+def_bcl2phix=def_ibis_path+"bcl2phix/bcl2phix"
+def_bcl2phixcombine=def_ibis_path+"bcl2phix/combinePhixFiles"
 
 def_extract_dataset = def_ibis_path+"createTrainingSeqs.py" ##SOAP V1
+def_extract_datasetBCL = def_ibis_path+"createTrainingSeqsBCL.py"
+
 def_align_path = def_soap_path
 def_align_ref = def_soap_ref
 #def_extract_dataset = def_ibis_path+"createTrainingSeqs_bowtie.py" ## BOWTIE 0.12.4 (tested)
