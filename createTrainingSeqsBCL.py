@@ -349,8 +349,8 @@ if True:
         cmd+= " "+str(options.path)+"  "+str(options.reference) + " >  "+options.tmp+"/"+timestamp+"_"+str(lane)+"_"+str(tile)+"_phix.txt";
         #print cmd;
         filesRead1.append(options.tmp+"/"+timestamp+"_"+str(lane)+"_"+str(tile)+"_phix.txt");
+        arrayOfJobsToSend.append(cmd);
 
-      arrayOfJobsToSend.append(cmd);
       if reads == 2:
         bclfile=""+str(options.path)+"/L00"+str(lane)+"/C"+str(tstart2+1)+".1/s_"+str(lane)+"_"+str(tile)+".bcl";
         if( os.path.isfile(bclfile) ):      
