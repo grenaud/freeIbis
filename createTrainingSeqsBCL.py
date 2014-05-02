@@ -340,24 +340,28 @@ if True:
 
   for lane in lanes:
     for tile in tiles:
-      cmd = def_bcl2phix+" -n "+str(tend-tstart)+" -f "+str(tstart+1)+"  -l "+str(lane)+" -t "+str(tile)+" -d "+str(options.mismatch);
-      if( len(options.control_index) != 0 ):
-        cmd+= " -i "+str(tend-tstart+1);
-        cmd+= " -s "+str(options.control_index);
-      cmd+= " "+str(options.path)+"  "+str(options.reference) + " >  "+options.tmp+"/"+timestamp+"_"+str(lane)+"_"+str(tile)+"_phix.txt";
-      #print cmd;
-      filesRead1.append(options.tmp+"/"+timestamp+"_"+str(lane)+"_"+str(tile)+"_phix.txt");
-
-      arrayOfJobsToSend.append(cmd);
-      if reads == 2:
-        cmd = def_bcl2phix+" -n "+str(tend2-tstart2)+" -f "+str(tstart2+1)+" -l "+str(lane)+" -t "+str(tile)+" -d "+str(options.mismatch);
+      bclfile=""+str(options.path)+"/L00"+str(lane)+"/C"+str(tstart+1)+".1/s_"+str(lane)+"_"+str(tile)+".bcl";
+      if( os.path.isfile(bclfile) ):      
+        cmd = def_bcl2phix+" -n "+str(tend-tstart)+" -f "+str(tstart+1)+"  -l "+str(lane)+" -t "+str(tile)+" -d "+str(options.mismatch);
         if( len(options.control_index) != 0 ):
           cmd+= " -i "+str(tend-tstart+1);
           cmd+= " -s "+str(options.control_index);
-        cmd+= " "+str(options.path)+"  "+str(options.reference)  + " >  "+options.tmp+"/"+timestamp+"_"+str(lane)+"_"+str(tile)+"_phix_r2.txt";
+        cmd+= " "+str(options.path)+"  "+str(options.reference) + " >  "+options.tmp+"/"+timestamp+"_"+str(lane)+"_"+str(tile)+"_phix.txt";
         #print cmd;
-        filesRead2.append(options.tmp+"/"+timestamp+"_"+str(lane)+"_"+str(tile)+"_phix_r2.txt");
-        arrayOfJobsToSend.append(cmd);
+        filesRead1.append(options.tmp+"/"+timestamp+"_"+str(lane)+"_"+str(tile)+"_phix.txt");
+
+      arrayOfJobsToSend.append(cmd);
+      if reads == 2:
+        bclfile=""+str(options.path)+"/L00"+str(lane)+"/C"+str(tstart2+1)+".1/s_"+str(lane)+"_"+str(tile)+".bcl";
+        if( os.path.isfile(bclfile) ):      
+          cmd = def_bcl2phix+" -n "+str(tend2-tstart2)+" -f "+str(tstart2+1)+" -l "+str(lane)+" -t "+str(tile)+" -d "+str(options.mismatch);
+          if( len(options.control_index) != 0 ):
+            cmd+= " -i "+str(tend-tstart+1);
+            cmd+= " -s "+str(options.control_index);
+          cmd+= " "+str(options.path)+"  "+str(options.reference)  + " >  "+options.tmp+"/"+timestamp+"_"+str(lane)+"_"+str(tile)+"_phix_r2.txt";
+          #print cmd;
+          filesRead2.append(options.tmp+"/"+timestamp+"_"+str(lane)+"_"+str(tile)+"_phix_r2.txt");
+          arrayOfJobsToSend.append(cmd);
   
   handleListOfjobs(arrayOfJobsToSend);
  
