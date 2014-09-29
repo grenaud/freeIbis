@@ -180,7 +180,8 @@ int main (int argc, char *argv[]) {
     int lastCycle           = -1;
 
     int firstCycleIDX       = -1;
-    string idxSequence      = "";
+    string idxSequence           = "";
+    bool   idxSequenceSpecified  = false;
 
     bool noIndex= true;    
     for(int i=1;i<(argc-1);i++){ //all but the last arg
@@ -229,12 +230,17 @@ int main (int argc, char *argv[]) {
 
 	if(string(argv[i]) == "-s" ){
 	    idxSequence=string(argv[i+1]);
+	    idxSequenceSpecified=true;
 	    i++;
 	    continue;
 	}
 
     }
-			      
+
+    if(idxSequenceSpecified){
+	ctrlSeqINDEXlength = idxSequence.size();
+    }
+
     if(lane.empty()){
 	cerr<<"lane must be defined"<<endl;
 	return 1;
