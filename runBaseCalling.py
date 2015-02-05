@@ -119,7 +119,7 @@ group.add_option("--end",dest="end",help="Last base to include/last base in each
 group.add_option("--numberN", dest="numberN", help="Maximum number of missing bases to be accepted (default 3)",default=3,type="int")
 group.add_option("--indexlength", dest="indexlength", help="Length of index read (default 0)",type="int",default=0)
 group.add_option("--2nd_indexlength", dest="indexlength2", help="Length of a second index read following the reverse read (default 0)",type="int",default=0)
-group.add_option("--control_index", dest="control_index", help="Sequence of index (only first index!) identifying control reads used for training/test data set (default '' = no filter)",default='')
+group.add_option("--control_index", dest="control_index", help="Sequence of index(es) (only first index!, comma separated for multiple) identifying control reads used for training/test data set (default '' = no filter)",default='')
 parser.add_option_group(group)
 
 group = OptionGroup(parser, "Training","Parameters for training")
@@ -299,10 +299,12 @@ else:
   lengthForReverse = 0;
 
 
-options.control_index = options.control_index.strip()
-if (options.control_index != '') and (len(options.control_index) != options.indexlength):
-  print "Defined control index sequence does not match defined length of index read."
-  sys.exit()
+
+if (options.control_index != ''):
+  for ctlIndex in options.control_index.split(","):
+    if (len(ctlIndex) != options.indexlength):
+      print "Defined control index sequence does not match defined length of index read."
+      sys.exit()
 
 if (options.corespred == None) :
   options.corespred=options.cores;

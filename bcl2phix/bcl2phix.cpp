@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <sstream>
 #include <map>
+#include <vector>
 #include <math.h>
 #include <algorithm>
 
@@ -155,7 +156,7 @@ int main (int argc, char *argv[]) {
 	"\t\t-t [tile#]\n"+
 	"\tOptional:\n"+
 	"\t\t-i [First cycle index]\n"+
-	"\t\t-s [Index sequence]\n"+
+	"\t\t-s [Index sequence(s)]\tComma separated if multiple indices were used\n"+
 	"\t\t-d [distance (Default "+stringify( maxEditDist )+")]\n"+
 	"\t\t-w [word length (Default "+stringify( wordlength )+")]\n\n"+
 
@@ -180,7 +181,9 @@ int main (int argc, char *argv[]) {
     int lastCycle           = -1;
 
     int firstCycleIDX       = -1;
-    string idxSequence           = "";
+    string idxSequenceTemp           = "";
+    vector<string> idxSequence;
+
     bool   idxSequenceSpecified  = false;
 
     bool noIndex= true;    
@@ -229,16 +232,36 @@ int main (int argc, char *argv[]) {
 	}
 
 	if(string(argv[i]) == "-s" ){
-	    idxSequence=string(argv[i+1]);
+	    idxSequenceTemp=string(argv[i+1]);
 	    idxSequenceSpecified=true;
 	    i++;
 	    continue;
 	}
 
+
     }
 
     if(idxSequenceSpecified){
-	ctrlSeqINDEXlength = idxSequence.size();
+	size_t lastfound=-1;
+	while(true){
+	    size_t found = idxSequenceTemp.find(',',lastfound+1);
+	    if (found!=string::npos){
+		idxSequence.push_back(idxSequenceTemp.substr(lastfound+1,found-lastfound-1));
+		lastfound=found;
+	    }else{
+		idxSequence.push_back(idxSequenceTemp.substr(lastfound+1));
+		break;
+	    }
+	}
+
+	ctrlSeqINDEXlength = int(idxSequence[0].size());
+	for(unsigned int i=1;i<idxSequence.size();i++){
+	    if(int(idxSequence[i].size()) != ctrlSeqINDEXlength){
+		cerr<<"Index= "<<idxSequence[i]<<" does not have the same length as the other "<<endl;
+		return 1;
+	    }
+	}
+	           
     }
 
     if(lane.empty()){
@@ -452,14 +475,23 @@ int main (int argc, char *argv[]) {
 		char toread;
 		mybclfileIndex[idxcycle].read(&toread, sizeof (char));
 		base returned=bin2base(toread);
-		sequenceIDX   +=returned.baseC;
+		sequenceIDX   +=        returned.baseC;
 		qualityIDX    +=char(33+returned.qualC);
 	    }
 
 	    //if(sequenceIDX != idxSequence){
-	    if(!isWithinHammingDistance(sequenceIDX,idxSequence,1)){
+	    //	for(unsigned int i=0;i<int(idxSequence.size());i++){
+	    bool oneMatch=false;
+	    for(unsigned int idxIdxSeq=0;idxIdxSeq<idxSequence.size();idxIdxSeq++){
+		if(isWithinHammingDistance(sequenceIDX,idxSequence[idxIdxSeq],1)){ // is within hamming dist, set to true and break
+		    oneMatch=true;
+		    break;
+		}
+	    }
 
-		//advance fps
+	    if(!oneMatch){ // if not a single one matched
+
+		//advance all fps
 		char toread;
 		for(int phixcycle=0;phixcycle<numberCycle;phixcycle++){
 		    mybclfilePhix[phixcycle].read(&toread, sizeof (char));
